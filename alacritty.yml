@@ -1,3 +1,7 @@
 font:
   normal:
     family: "MesloLGS NF"
+window:
+  startup_mode: "Maximized"
+  decorations: "None"
+  opacity: 0.8
