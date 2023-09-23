@@ -1,5 +1,6 @@
 alias zshconfig="nvim ~/.zshrc"
 alias szz="source ~/.zshrc"
+alias tzz="tmux source $TMUXCONFIG"
 alias aliasconfig="nvim ~/.oh-my-zsh/custom/my_aliases.zsh"
 alias pathconfig="nvim ~/.oh-my-zsh/custom/my_paths.zsh"
 alias ohmyzsh="nvim ~/.oh-my-zsh"
@@ -7,7 +8,7 @@ alias ohmyzsh="nvim ~/.oh-my-zsh"
 VIMCONFIG="$HOME/.config/nvim"
 alias vimconfig="nvim $VIMCONFIG"
 
-TMUXCONFIG="$HOME/.config/tmux/tmux.conf"
+TMUXCONFIG="$HOME/.tmux.conf"
 alias tmuxconfig="nvim $TMUXCONFIG"
 
 FLUTTERSDK="$HOME/fvm/default/bin"
