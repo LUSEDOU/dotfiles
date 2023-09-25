@@ -20,6 +20,12 @@ alias belity="cd $BELITY"
 BELITER="$BELITECH/beliter_app"
 alias beliter="cd $BELITER"
 
+ANALYSIS="$BELITECH/analysis"
+alias analysis="cd $ANALYSIS"
+
+BACKEND="$BELITECH/backend"
+alias backend="cd $BACKEND"
+
 alias ff="fvm flutter $*"
 alias ffr="ff run $*"
 alias ffa="ff build apk $*"
