@@ -1,4 +1,5 @@
 local lsp = require('lsp-zero').preset({})
+local cmp = require('cmp')
 
 lsp.on_attach(function(client, bufnr)
     -- see :help lsp-zero-keybindings
@@ -24,7 +25,6 @@ end)
 require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
 
 
-local cmp = require('cmp')
 local cmp_select = { behavior = cmp.SelectBehavior.Select }
 local cmp_mappings = lsp.defaults.cmp_mappings({
     ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
@@ -34,11 +34,18 @@ local cmp_mappings = lsp.defaults.cmp_mappings({
     ['<C-e>'] = cmp.mapping.complete(),
 })
 
+local cmp_sources = {
+    { name = 'nvim_cmp' },
+    { name = 'nvim_lsp' },
+    { name = 'luasnip',  option = { show_autosnippets = false } },
+}
+
 cmp_mappings['<Tab>'] = nil
 cmp_mappings['<S-Tab>'] = nil
 
 lsp.setup_nvim_cmp({
-    mapping = cmp_mappings
+    mapping = cmp_mappings,
+    sources = cmp_sources
 })
 
 lsp.setup()

@@ -34,6 +34,7 @@ require("lazy").setup({
             { 'hrsh7th/nvim-cmp' },     -- Required
             { 'hrsh7th/cmp-nvim-lsp' }, -- Required
             { 'L3MON4D3/LuaSnip' },     -- Required
+            { 'saadparwaiz1/cmp_luasnip' },
         }
     },
 
@@ -56,6 +57,15 @@ require("lazy").setup({
     {
         -- "rebelot/kanagawa.nvim",
         "ajmwagar/vim-deus",
+        dependencies = {
+            {
+                'xiyaowong/transparent.nvim',
+                opts = true,
+                config = function ()
+                    require('transparent').toggle(true)
+                end
+            },
+        },
         priority = 1000,
         config = function()
             vim.cmd.colorscheme 'deus'
