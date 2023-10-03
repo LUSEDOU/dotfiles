@@ -34,6 +34,7 @@ require("lazy").setup({
             { 'hrsh7th/nvim-cmp' },     -- Required
             { 'hrsh7th/cmp-nvim-lsp' }, -- Required
             { 'L3MON4D3/LuaSnip' },     -- Required
+            { 'saadparwaiz1/cmp_luasnip' },
         }
     },
 
@@ -56,13 +57,22 @@ require("lazy").setup({
     {
         -- "rebelot/kanagawa.nvim",
         "ajmwagar/vim-deus",
+        dependencies = {
+            {
+                'xiyaowong/transparent.nvim',
+                opts = true,
+                config = function ()
+                    require('transparent').toggle(true)
+                end
+            },
+        },
         priority = 1000,
         config = function()
             vim.cmd.colorscheme 'deus'
         end,
     },
 
-     -- Treesitter
+    -- Treesitter
     {
         'nvim-treesitter/nvim-treesitter',
         dependencies = {
@@ -81,6 +91,25 @@ require("lazy").setup({
             "antoinemadec/FixCursorHold.nvim",
             'sidlatau/neotest-dart'
         },
+    },
+
+    --- DB
+    -- DadBod
+    {
+        'kristijanhusak/vim-dadbod-ui',
+        dependencies = {
+            {
+                "tpope/vim-dadbod", lazy = true
+            },
+            {
+                "kristijanhusak/vim-dadbod-completion",
+                ft = { 'sql', 'mysql', 'plsql' },
+                lazy = true,
+            },
+        },
+        init = function()
+            vim.g.db_ui_use_ned_fonts = 1
+        end
     },
 
     -- Harpoon
