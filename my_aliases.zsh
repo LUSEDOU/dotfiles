@@ -12,7 +12,7 @@ alias vimconfig="cd $VIMCONFIG && nvim ."
 TMUXCONFIG="$HOME/.tmux.conf"
 alias tmuxconfig="nvim $TMUXCONFIG"
 
-FLUTTERSDK="$HOME/fvm/default/bin"
+FDK="$HOME/fvm/default/bin"
 
 BELITECH="$HOME/BELITECH"
 alias belitech="cd $BELITECH"
@@ -31,6 +31,7 @@ alias analysis="cd $ANALYSIS"
 
 alias ff="fvm flutter $*"
 alias ffr="ff run $*"
+alias ffg="ff pub get $*"
 alias ffa="ff build apk $*"
 alias ffad="ffa --debug $*"
 
