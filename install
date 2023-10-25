@@ -1,0 +1,7 @@
+#!/bin/zsh
+[[ -z $DOTFILES ]] && DOTFILES=$HOME/.dotfiles
+
+if [[ -z $STOW_FOLDERS ]] && STOW_FOLDERS=""
+
+for folders
+

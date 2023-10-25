@@ -1,0 +1,19 @@
+#!/bin/zsh
+sudo apt install fzf
+sudo apt install fuse
+sudo apt install stow
+wget https://github.com/neovim/neovim/releases/download/stable/nvim.appimage 
+sudo mv nvim.appimage /usr/local/bin/nvim
+CUSTOM_NVIM_PATH=/usr/local/bin/nvim
+set -u
+sudo update-alternatives --install /usr/bin/ex ex "${CUSTOM_NVIM_PATH}" 110
+sudo update-alternatives --install /usr/bin/vi vi "${CUSTOM_NVIM_PATH}" 110
+sudo update-alternatives --install /usr/bin/view view "${CUSTOM_NVIM_PATH}" 110
+sudo update-alternatives --install /usr/bin/vim vim "${CUSTOM_NVIM_PATH}" 110
+sudo update-alternatives --install /usr/bin/vimdiff vimdiff "${CUSTOM_NVIM_PATH}" 110
+sudo apt install zsh
+sudo schs -s $(which zsh)
+sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+git clone https://github.com/zdharma-continuum/fast-syntax-highlighting.git \
