@@ -12,6 +12,10 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
+    {
+        'christoomey/vim-tmux-navigator',
+    },
+
     -- Telescope
     {
         'nvim-telescope/telescope.nvim',
@@ -33,8 +37,13 @@ require("lazy").setup({
             -- Autocompletion
             { 'hrsh7th/nvim-cmp' },     -- Required
             { 'hrsh7th/cmp-nvim-lsp' }, -- Required
-            { 'L3MON4D3/LuaSnip' },     -- Required
+            { 'hrsh7th/cmp-nvim-lua' },
+            { 'hrsh7th/cmp-buffer' },
+            { 'hrsh7th/cmp-path' },
             { 'saadparwaiz1/cmp_luasnip' },
+
+            -- Snippets
+            { 'L3MON4D3/LuaSnip' }, -- Required
         }
     },
 
@@ -46,6 +55,11 @@ require("lazy").setup({
             'nvim-lua/plenary.nvim',
         },
         config = true,
+    },
+
+    -- Trouble
+    {
+        "folke/trouble.nvim",
     },
 
     -- VimTex
@@ -61,7 +75,7 @@ require("lazy").setup({
             {
                 'xiyaowong/transparent.nvim',
                 opts = true,
-                config = function ()
+                config = function()
                     require('transparent').toggle(true)
                 end
             },
@@ -81,6 +95,7 @@ require("lazy").setup({
         build = ':TSUpdate',
     },
 
+    { "nvim-treesitter/nvim-treesitter-context" },
 
     -- NeoTest
     {
@@ -108,9 +123,12 @@ require("lazy").setup({
             },
         },
         init = function()
-            vim.g.db_ui_use_ned_fonts = 1
+            vim.g.db_ui_use_nerd_fonts = 1
         end
     },
+
+    -- Zen Mode
+    { 'folke/zen-mode.nvim' },
 
     -- Harpoon
     { 'ThePrimeagen/harpoon' },
@@ -125,7 +143,7 @@ require("lazy").setup({
     { 'github/copilot.vim' },
 
     -- Comment
-    { 'numToStr/Comment.nvim', opts = {} },
+    { 'numToStr/Comment.nvim',                  opts = {} },
 
 
     -- Autopairs
@@ -144,6 +162,9 @@ require("lazy").setup({
     {
         'iamcco/markdown-preview.nvim',
         build = 'cd app && yarn install',
+        dependencies = {
+            'preservim/vim-markdown',
+        }
     },
 
 }, {})
