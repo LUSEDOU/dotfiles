@@ -8,7 +8,6 @@ plugins=(
     emoji
     encode64
     zsh-autosuggestions
-    sudo
     web-search
     dirhistory
     zsh-syntax-highlighting
@@ -20,6 +19,8 @@ export ZSH_DISABLE_COMPFIX=true
 source $ZSH/oh-my-zsh.sh
 
 setopt interactivecomments # Activate bash style comments
+
+bindkey -v # Use vim keybindings in zsh
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
