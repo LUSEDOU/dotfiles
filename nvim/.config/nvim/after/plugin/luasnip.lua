@@ -258,3 +258,26 @@ ls.add_snippets('tex', {
         }
     )),
 })
+
+-- Markdown
+ls.add_snippets('markdown', {
+    s({
+        trig = "**",
+        snippetType = "autosnippet",
+    }, fmta(
+        "**<>**",
+        {
+            d(1, get_visual),
+        }
+    )),
+
+    s({
+        trig = "__",
+        snippetType = "autosnippet",
+    }, fmta(
+        "_<>_",
+        {
+            d(1, get_visual),
+        }
+    )),
+})
