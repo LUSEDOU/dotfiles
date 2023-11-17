@@ -4,9 +4,11 @@ alias tzz="tmux source $TMUXCONFIG"
 alias aliasconfig="nvim ~/.oh-my-zsh/custom/my_aliases.zsh"
 alias pathconfig="nvim ~/.oh-my-zsh/custom/my_paths.zsh"
 alias ohmyzsh="nvim ~/.oh-my-zsh"
-alias dotfiles="cd ~/dotfiles && nvim ."
 
-VIMCONFIG="$HOME/.config/nvim"
+DOTFILES="$HOME/dotfiles"
+alias dotfiles="cd $DOTFILES && nvim ."
+
+VIMCONFIG="$DOTFILES/nvim/.config/nvim"
 alias vimconfig="cd $VIMCONFIG && nvim ."
 
 TMUXCONFIG="$HOME/.tmux.conf"
@@ -34,5 +36,7 @@ alias ffr="ff run $*"
 alias ffg="ff pub get $*"
 alias ffa="ff build apk $*"
 alias ffad="ffa --debug $*"
+
+alias dd="fvm dart $*"
 
 alias t="tree -L 2"
