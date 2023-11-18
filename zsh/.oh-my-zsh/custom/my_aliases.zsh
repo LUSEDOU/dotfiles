@@ -36,6 +36,7 @@ alias ffr="ff run $*"
 alias ffg="ff pub get $*"
 alias ffa="ff build apk $*"
 alias ffad="ffa --debug $*"
+alias dd="fvm dart $*"
 
 alias dd="fvm dart $*"
 

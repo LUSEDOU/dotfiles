@@ -1,3 +1,4 @@
+
 export ZSH="$HOME/.oh-my-zsh"
 
 ZSH_THEME="robbyrussell"
@@ -10,7 +11,7 @@ plugins=(
     zsh-autosuggestions
     web-search
     dirhistory
-    zsh-syntax-highlighting
+    # zsh-syntax-highlighting
     fast-syntax-highlighting
 )
 
@@ -21,17 +22,18 @@ source $ZSH/oh-my-zsh.sh
 setopt interactivecomments # Activate bash style comments
 
 bindkey -v # Use vim keybindings in zsh
+# bindkey "^F" "/Users/lusedou/.local/bin/scripts/tmux-sessionizer"
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$($HOME'/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+__conda_setup="$('/Users/lusedou/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
 if [ $? -eq 0 ]; then
     eval "$__conda_setup"
 else
-    if [ -f $HOME"/miniconda3/etc/profile.d/conda.sh" ]; then
-        . $HOME"/miniconda3/etc/profile.d/conda.sh"
+    if [ -f "/Users/lusedou/miniconda3/etc/profile.d/conda.sh" ]; then
+        . "/Users/lusedou/miniconda3/etc/profile.d/conda.sh"
     else
-        export PATH=$HOME"/miniconda3/bin:$PATH"
+        export PATH="/Users/lusedou/miniconda3/bin:$PATH"
     fi
 fi
 unset __conda_setup
@@ -45,6 +47,7 @@ export NVM_DIR="$HOME/.nvm"
 eval "$(starship init zsh)"
 
 neofetch
+
 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="$HOME/.sdkman"
