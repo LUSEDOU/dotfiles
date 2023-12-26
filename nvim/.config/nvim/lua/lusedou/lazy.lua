@@ -144,7 +144,10 @@ require("lazy").setup({
     { 'github/copilot.vim' },
 
     -- Comment
-    { 'numToStr/Comment.nvim',                  opts = {} },
+    {
+        'numToStr/Comment.nvim',
+        opts = {}
+    },
 
 
     -- Autopairs
