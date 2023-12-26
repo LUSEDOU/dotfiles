@@ -157,6 +157,10 @@ require("lazy").setup({
         opts = {} -- this is equalent to setup({}) function
     },
 
+    {
+        'tpope/vim-sleuth'
+    },
+
     -- Which Key
     {
         'folke/which-key.nvim', opts = {},
