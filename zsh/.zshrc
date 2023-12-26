@@ -9,7 +9,7 @@ plugins=(
     emoji
     encode64
     zsh-autosuggestions
-    web-search
+    # web-search
     dirhistory
     # zsh-syntax-highlighting
     fast-syntax-highlighting
@@ -52,3 +52,14 @@ neofetch
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="$HOME/.sdkman"
 [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+
+## [Completion]
+## Completion scripts setup. Remove the following line to uninstall
+[[ -f /Users/lusedou/.dart-cli-completion/zsh-config.zsh ]] && . /Users/lusedou/.dart-cli-completion/zsh-config.zsh || true
+## [/Completion]
+
+export PATH="/opt/homebrew/opt/php@7.4/bin:$PATH"
+export PATH="/opt/homebrew/opt/php@7.4/sbin:$PATH"
+
+test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+
