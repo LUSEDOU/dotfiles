@@ -12,10 +12,19 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
+    -- TMUX
     {
         'christoomey/vim-tmux-navigator',
     },
 
+    --- Development
+    -- Neodev
+    -- {
+    --     "folke/neodev.nvim",
+    --     opts = {}
+    -- },
+
+    --- Editor
     -- Telescope
     {
         'nvim-telescope/telescope.nvim',
@@ -141,7 +150,10 @@ require("lazy").setup({
     { 'tpope/vim-fugitive' },
 
     -- Copilot
-    { 'zbirenbaum/copilot.lua' },
+    {
+        'zbirenbaum/copilot.lua',
+        build = ":Copilot auth",
+    },
 
     -- Comment
     {

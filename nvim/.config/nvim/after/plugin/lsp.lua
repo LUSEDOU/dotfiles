@@ -37,7 +37,8 @@ local cmp_mappings = lsp.defaults.cmp_mappings({
 local cmp_sources = {
     { name = 'nvim_cmp' },
     { name = 'nvim_lsp' },
-    { name = 'luasnip',  option = { show_autosnippets = false } },
+    { name = 'luasnip',    option = { show_autosnippets = false } },
+    { name = 'copilot' }
 }
 
 cmp_mappings['<Tab>'] = nil
