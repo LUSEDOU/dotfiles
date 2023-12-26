@@ -13,6 +13,8 @@ local d = ls.dynamic_node
 local r = ls.restore_node
 local rep = extras.rep
 
+local line_begin = require("luasnip.extras.expand_conditions").line_begin
+
 ls.config.set_config({
     enable_autosnippets = true,
     history = true,
@@ -257,6 +259,81 @@ ls.add_snippets('tex', {
             f(function(_, snip) return snip.captures[2] end),
         }
     )),
+
+    s({
+        trig = "([^%a])ee",
+        wordTrig = false,
+        regTrig = true,
+        snippetType = "autosnippet",
+    }, fmta(
+        "<>e^{<>}<>",
+        {
+            f(function(_, snip) return snip.captures[1] end),
+            d(1, get_visual),
+            i(0)
+        }
+    )),
+
+    s({
+        -- trig = "h1"
+        trig = "h1",
+        snippetType = "autosnippet",
+    }, fmta(
+        [[
+        \section{<>}
+        <>
+        ]],
+        {
+            i(1),
+            i(0)
+        }
+    ), {
+        condition = line_begin
+    }),
+
+    s({
+        trig = "h2"
+    }, fmta(
+        [[
+        \subsection{<>}
+        <>
+        ]],
+        {
+            i(1),
+            i(0)
+        }
+    ), {
+        condition = line_begin
+    }),
+
+    s({
+        trig = "h3"
+    }, fmta(
+        [[
+        \subsubsection{<>}
+        <>
+        ]],
+        {
+            i(1),
+            i(0)
+        }
+    ), {
+        condition = line_begin
+    }),
+
+    s({
+        trig = "h4"
+    }, fmta(
+        [[
+        \paragraph{<>} <>
+        ]],
+        {
+            i(1),
+            i(0)
+        }
+    ), {
+        condition = line_begin
+    }),
 })
 
 -- Markdown
@@ -281,3 +358,13 @@ ls.add_snippets('markdown', {
         }
     )),
 })
+
+vim.keymap.set({'i', 's'}, 'jk', function()
+    -- jump
+    if ls.jumpable(1) then
+        ls.jump(1)
+    else
+        -- write jk
+        vim.api.nvim_feedkeys('jk', 'n', false)
+    end
+end, { silent = true, expr = false, noremap = true })
