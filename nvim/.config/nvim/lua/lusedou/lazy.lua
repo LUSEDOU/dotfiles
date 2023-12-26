@@ -170,9 +170,9 @@ require("lazy").setup({
     {
         'iamcco/markdown-preview.nvim',
         build = 'cd app && yarn install',
-        dependencies = {
-            'preservim/vim-markdown',
-        }
+        -- dependencies = {
+        --     'preservim/vim-markdown',
+        -- }
     },
 
 }, {})
