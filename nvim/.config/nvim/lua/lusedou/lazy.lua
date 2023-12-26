@@ -141,7 +141,7 @@ require("lazy").setup({
     { 'tpope/vim-fugitive' },
 
     -- Copilot
-    { 'github/copilot.vim' },
+    { 'zbirenbaum/copilot.lua' },
 
     -- Comment
     {
