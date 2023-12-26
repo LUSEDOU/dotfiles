@@ -19,10 +19,10 @@ require("lazy").setup({
 
     --- Development
     -- Neodev
-    -- {
-    --     "folke/neodev.nvim",
-    --     opts = {}
-    -- },
+    {
+        "folke/neodev.nvim",
+        opts = {}
+    },
 
     --- Editor
     -- Telescope

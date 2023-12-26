@@ -29,7 +29,10 @@ copilot.setup({
 
 -- Copilot panel
 vim.keymap.set({ 'n', 'i' }, "<C-c>", function()
-  panel.open()
+  panel.open({
+    position = 'right',
+    size = 0.5,
+  })
   -- Move the the right window
   vim.cmd('wincmd l')
 end, { noremap = true, silent = true })
