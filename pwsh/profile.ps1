@@ -22,6 +22,20 @@ function szz {
 Set-Alias -Name vim -Value nvim
 Set-Alias -Name lg -Value lazygit
 
+# Flutter
+function ddg {
+    fvm dart pub get
+}
+function ffg {
+    fvm flutter pub get
+}
+function dd {
+    fvm dart
+}
+function ff {
+    fvm flutter
+}
+
 # powershell completion for oh-my-posh                           -*- shell-script -*-
 
 function __oh-my-posh_debug {
