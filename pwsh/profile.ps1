@@ -1,3 +1,9 @@
+$Perufarma = "${HOME}\perufarma"
+$Dotfiles = "${HOME}\dotfiles"
+
+$env:PATH = $env:PATH + ";${HOME}\.local\bin"
+$env:PATH = $env:PATH + ";${HOME}\.local\bin\scripts"
+
 
 function make-link ($target, $link) {
     New-Item -Path $link -ItemType SymbolicLink -Value $target
@@ -5,13 +11,20 @@ function make-link ($target, $link) {
 
 # cd $env:USERPROFILE\dotfiles && nvim .
 function dotfiles {
-    cd $Home\dotfiles
-    nvim .
+    cd $Dotfiles
+}
+
+function tt {
+    fd . $Home $Perufarma $Dotfiles -t d -d 1 | fzf | cd
+}
+
+function perufarma {
+    cd $Perufarma
 }
 
 # cd $env:USERPROFILE\sally
 function sally {
-    cd $Home\sally
+    cd $Perufarma\sally
 }
 
 # . $profile
