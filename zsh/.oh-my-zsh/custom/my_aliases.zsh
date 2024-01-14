@@ -1,18 +1,22 @@
+DOTFILES="$HOME/dotfiles"
+alias dotfiles="cd $DOTFILES && nvim ."
+
+ZSHCONFIG="$DOTFILES/zsh/.oh-my-zsh/custom"
+
 alias zshconfig="nvim ~/.zshrc"
 alias szz="source ~/.zshrc"
 alias tzz="tmux source $TMUXCONFIG"
-alias aliasconfig="nvim ~/.oh-my-zsh/custom/my_aliases.zsh"
-alias pathconfig="nvim ~/.oh-my-zsh/custom/my_paths.zsh"
+alias aliasconfig="nvim $ZSHCONFIG/my_aliases.zsh"
+alias pathconfig="nvim $ZSHCONFIG/my_paths.zsh"
 alias ohmyzsh="nvim ~/.oh-my-zsh"
-
-DOTFILES="$HOME/dotfiles"
-alias dotfiles="cd $DOTFILES && nvim ."
 
 VIMCONFIG="$DOTFILES/nvim/.config/nvim"
 alias vimconfig="cd $VIMCONFIG && nvim ."
 
 TMUXCONFIG="$HOME/.tmux.conf"
 alias tmuxconfig="nvim $TMUXCONFIG"
+
+alias binconfig="cd $DOTFILES/bin && nvim ."
 
 FDK="$HOME/fvm/default/bin"
 
@@ -73,3 +77,31 @@ n ()
         rm -f "$NNN_TMPFILE" > /dev/null
     }
 }
+
+unalias gg
+# Clone a git repository to a given directory
+gg() {
+    local host="github.com"
+
+    if ! command -v git &>/dev/null; then
+        echo "git not found"
+        return
+    fi
+
+    if [ $# -eq 0 ]; then
+        echo "Usage: gg <user>/<repo> [dir]"
+        return
+    fi
+
+    local repo_url="ssh://git@$host/$1.git"
+    local dir="$HOME/projects/$2/${1##*/}"
+
+    if [ -d "$dir" ]; then
+        echo "$dir already exists"
+        return
+    fi
+
+    git clone "$repo_url" "$dir"
+}
+
+alias vim="nvim"
