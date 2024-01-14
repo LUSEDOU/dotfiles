@@ -141,7 +141,10 @@ require("lazy").setup({
     { 'folke/zen-mode.nvim' },
 
     -- Harpoon
-    { 'ThePrimeagen/harpoon' },
+    {
+        'ThePrimeagen/harpoon',
+        branch = 'harpoon2'
+    },
 
     -- UndoTree
     { 'mbbill/undotree' },
