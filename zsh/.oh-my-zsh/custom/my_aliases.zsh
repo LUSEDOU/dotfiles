@@ -47,6 +47,7 @@ alias t="tree -L 2"
 alias lg="lazygit"
 # unalias github
 
+VISUAL=ewrap
 n ()
 {
     # Block nesting of nnn in subshells
