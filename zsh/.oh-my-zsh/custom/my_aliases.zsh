@@ -47,9 +47,9 @@ alias t="tree -L 2"
 alias lg="lazygit"
 # unalias github
 
-VISUAL=ewrap
 n ()
 {
+    export VISUAL=ewrap
     # Block nesting of nnn in subshells
     [ "${NNNLVL:-0}" -eq 0 ] || {
         echo "nnn is already running"
