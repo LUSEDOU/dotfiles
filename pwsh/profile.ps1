@@ -63,6 +63,26 @@ function ff
 {
     fvm flutter $args
 }
+function Invoke-GitClone
+{
+    param (
+        [Parameter(Mandatory=$true)]
+        [string]$Repository,
+        [string]$Domain = 'github.com',
+        [string]$Directory = ("$Home/stuff"),
+        [bool]$UseSSH = $false
+    )
+    $url = "https://$Domain/$Repository"
+
+    if ($UseSSH)
+    {
+        $url = "ssh://git@$Domain/$Repository"
+    }
+    $Directory = Join-Path $Directory $Repository.Split('/')[-1]
+    Write-Output 'Cloning repository in ' $Directory
+    git clone $url $Directory
+}
+Set-Alias -Name gg -Value Invoke-GitClone
 
 # powershell completion for oh-my-posh                           -*- shell-script -*-
 
