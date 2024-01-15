@@ -5,7 +5,7 @@ $env:PATH = $env:PATH + ";${HOME}\.local\bin"
 $env:PATH = $env:PATH + ";${HOME}\.local\bin\scripts"
 
 
-function make-link ($target, $link)
+function link ($target, $link)
 {
     New-Item -Path $link -ItemType SymbolicLink -Value $target
 }
