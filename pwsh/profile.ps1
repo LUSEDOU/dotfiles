@@ -42,6 +42,10 @@ function touch
 {
     New-Item -ItemType File $args[0]
 }
+function mkcd
+{
+    New-Item -ItemType Directory $args[0] | Set-Location
+}
 
 Set-Alias -Name vim -Value nvim
 Set-Alias -Name lg -Value lazygit
