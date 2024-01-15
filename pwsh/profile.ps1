@@ -10,26 +10,26 @@ function link ($target, $link)
     New-Item -Path $link -ItemType SymbolicLink -Value $target
 }
 
-# cd $env:USERPROFILE\dotfiles && nvim .
+# Set-Location $env:USERPROFILE\dotfiles && nvim .
 function dotfiles
 {
-    cd $Dotfiles
+    Set-Location $Dotfiles
 }
 
 function tt
 {
-    fd . $Home $Perufarma $Dotfiles -t d -d 1 -H | fzf | cd
+    fd . $Home $Perufarma $Dotfiles -t d -d 1 -H | fzf | Set-Location
 }
 
 function perufarma
 {
-    cd $Perufarma
+    Set-Location $Perufarma
 }
 
-# cd $env:USERPROFILE\sally
+# Set-Location $env:USERPROFILE\sally
 function sally
 {
-    cd $Perufarma\sally
+    Set-Location $Perufarma\sally
 }
 
 # . $profile
