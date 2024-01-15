@@ -15,7 +15,7 @@ function dotfiles {
 }
 
 function tt {
-    fd . $Home $Perufarma $Dotfiles -t d -d 1 | fzf | cd
+    fd . $Home $Perufarma $Dotfiles -t d -d 1 -H | fzf | cd
 }
 
 function perufarma {
@@ -29,7 +29,11 @@ function sally {
 
 # . $profile
 function szz {
-    . $profile
+    . $PROFILE
+}
+
+function touch {
+    New-Item -ItemType File $args[0]
 }
 
 Set-Alias -Name vim -Value nvim
@@ -37,16 +41,16 @@ Set-Alias -Name lg -Value lazygit
 
 # Flutter
 function ddg {
-    fvm dart pub get
+    fvm dart pub get $args
 }
 function ffg {
-    fvm flutter pub get
+    fvm flutter pub get $args
 }
 function dd {
-    fvm dart
+    fvm dart $args
 }
 function ff {
-    fvm flutter
+    fvm flutter $args
 }
 
 # powershell completion for oh-my-posh                           -*- shell-script -*-
@@ -298,4 +302,15 @@ Set-PSReadlineKeyHandler -Key Tab -Function MenuComplete
 
 Import-Module -Name Terminal-Icons
 
-oh-my-posh init pwsh --config '~/.mytheme.omp.json' | Invoke-Expression
+if (Get-Command 'starship' -ErrorAction SilentlyContinue) {
+  function Invoke-Starship-PreCommand {
+    if ($global:profile_initialized -ne $true) {
+      $global:profile_initialized = $true
+      Initialize-Profile
+    }
+  }
+  Invoke-Expression (&starship init powershell)
+}
+
+neofetch
+# oh-my-posh init pwsh --config '~/.mytheme.omp.json' | Invoke-Expression
