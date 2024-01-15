@@ -46,9 +46,14 @@ function mkcd
 {
     New-Item -ItemType Directory $args[0] | Set-Location
 }
+function rmrf
+{
+    Remove-Item -Recurse -Force $args[0]
+}
 
 Set-Alias -Name vim -Value nvim
 Set-Alias -Name lg -Value lazygit
+
 
 # Flutter
 function ddg
