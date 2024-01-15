@@ -11,15 +11,26 @@ end
 config.font = wezterm.font 'MesloLGM Nerd Font'
 -- config.color_scheme = 'Dark Ocean (terminal.sexy)'
 config.color_scheme = 'darkmoss (base16)'
--- config.window_background_opacity = 0.8
+config.window_background_opacity = 0.8
 config.scrollback_lines = 6000
 config.window_close_confirmation = 'NeverPrompt'
 
 -- Tmux-like keybindings
 config.leader = { key = 'a', mods = 'CTRL', timeout_milliseconds = 1000 }
 
-wezterm.on('update-right-status', function(window, pane)
-  window:set_right_status(window:active_workspace())
+wezterm.on('update-status', function(window, pane)
+  local date = wezterm.strftime '%a %b %-d %H:%M'
+
+  local bat = ''
+  for _, b in ipairs(wezterm.battery_info()) do
+    bat = '🔋 ' .. string.format('%.0f%%', b.state_of_charge * 100)
+  end
+
+  window:set_right_status(wezterm.format {
+    { text = bat, style = { foreground = '#00ff00' } },
+    { text = ' ' },
+    { text = date, style = { foreground = '#ffffff' } },
+  })
 end)
 
 keys = {
