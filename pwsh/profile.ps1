@@ -5,34 +5,41 @@ $env:PATH = $env:PATH + ";${HOME}\.local\bin"
 $env:PATH = $env:PATH + ";${HOME}\.local\bin\scripts"
 
 
-function make-link ($target, $link) {
+function make-link ($target, $link)
+{
     New-Item -Path $link -ItemType SymbolicLink -Value $target
 }
 
 # cd $env:USERPROFILE\dotfiles && nvim .
-function dotfiles {
+function dotfiles
+{
     cd $Dotfiles
 }
 
-function tt {
+function tt
+{
     fd . $Home $Perufarma $Dotfiles -t d -d 1 -H | fzf | cd
 }
 
-function perufarma {
+function perufarma
+{
     cd $Perufarma
 }
 
 # cd $env:USERPROFILE\sally
-function sally {
+function sally
+{
     cd $Perufarma\sally
 }
 
 # . $profile
-function szz {
+function szz
+{
     . $PROFILE
 }
 
-function touch {
+function touch
+{
     New-Item -ItemType File $args[0]
 }
 
@@ -40,37 +47,44 @@ Set-Alias -Name vim -Value nvim
 Set-Alias -Name lg -Value lazygit
 
 # Flutter
-function ddg {
+function ddg
+{
     fvm dart pub get $args
 }
-function ffg {
+function ffg
+{
     fvm flutter pub get $args
 }
-function dd {
+function dd
+{
     fvm dart $args
 }
-function ff {
+function ff
+{
     fvm flutter $args
 }
 
 # powershell completion for oh-my-posh                           -*- shell-script -*-
 
-function __oh-my-posh_debug {
-    if ($env:BASH_COMP_DEBUG_FILE) {
+function __oh-my-posh_debug
+{
+    if ($env:BASH_COMP_DEBUG_FILE)
+    {
         "$args" | Out-File -Append -FilePath "$env:BASH_COMP_DEBUG_FILE"
     }
 }
 
-filter __oh-my-posh_escapeStringWithSpecialChars {
+filter __oh-my-posh_escapeStringWithSpecialChars
+{
     $_ -replace '\s|#|@|\$|;|,|''|\{|\}|\(|\)|"|`|\||<|>|&','`$&'
 }
 
 [scriptblock]${__oh_my_poshCompleterBlock} = {
     param(
-            $WordToComplete,
-            $CommandAst,
-            $CursorPosition
-        )
+        $WordToComplete,
+        $CommandAst,
+        $CursorPosition
+    )
 
     # Get the current command line and convert into a string
     $Command = $CommandAst.CommandElements
@@ -85,7 +99,8 @@ filter __oh-my-posh_escapeStringWithSpecialChars {
     # to truncate the command-line ($Command) up to the $CursorPosition location.
     # Make sure the $Command is longer then the $CursorPosition before we truncate.
     # This happens because the $Command does not include the last space.
-    if ($Command.Length -gt $CursorPosition) {
+    if ($Command.Length -gt $CursorPosition)
+    {
         $Command=$Command.Substring(0,$CursorPosition)
     }
     __oh-my-posh_debug "Truncated command: $Command"
@@ -107,7 +122,8 @@ filter __oh-my-posh_escapeStringWithSpecialChars {
     # we cannot use $WordToComplete because it
     # has the wrong values if the cursor was moved
     # so use the last argument
-    if ($WordToComplete -ne "" ) {
+    if ($WordToComplete -ne "" )
+    {
         $WordToComplete = $Arguments.Split(" ")[-1]
     }
     __oh-my-posh_debug "New WordToComplete: $WordToComplete"
@@ -115,13 +131,15 @@ filter __oh-my-posh_escapeStringWithSpecialChars {
 
     # Check for flag with equal sign
     $IsEqualFlag = ($WordToComplete -Like "--*=*" )
-    if ( $IsEqualFlag ) {
+    if ( $IsEqualFlag )
+    {
         __oh-my-posh_debug "Completing equal sign flag"
         # Remove the flag part
         $Flag,$WordToComplete = $WordToComplete.Split("=",2)
     }
 
-    if ( $WordToComplete -eq "" -And ( -Not $IsEqualFlag )) {
+    if ( $WordToComplete -eq "" -And ( -Not $IsEqualFlag ))
+    {
         # If the last parameter is complete (there is a space following it)
         # We add an extra empty parameter so we can indicate this to the go method.
         __oh-my-posh_debug "Adding extra empty parameter"
@@ -131,10 +149,12 @@ filter __oh-my-posh_escapeStringWithSpecialChars {
         if ($PSVersionTable.PsVersion -lt [version]'7.2.0' -or
             ($PSVersionTable.PsVersion -lt [version]'7.3.0' -and -not [ExperimentalFeature]::IsEnabled("PSNativeCommandArgumentPassing")) -or
             (($PSVersionTable.PsVersion -ge [version]'7.3.0' -or [ExperimentalFeature]::IsEnabled("PSNativeCommandArgumentPassing")) -and
-              $PSNativeCommandArgumentPassing -eq 'Legacy')) {
-             $RequestComp="$RequestComp" + ' `"`"'
-        } else {
-             $RequestComp="$RequestComp" + ' ""'
+            $PSNativeCommandArgumentPassing -eq 'Legacy'))
+        {
+            $RequestComp="$RequestComp" + ' `"`"'
+        } else
+        {
+            $RequestComp="$RequestComp" + ' ""'
         }
     }
 
@@ -148,7 +168,8 @@ filter __oh-my-posh_escapeStringWithSpecialChars {
 
     # get directive from last line
     [int]$Directive = $Out[-1].TrimStart(':')
-    if ($Directive -eq "") {
+    if ($Directive -eq "")
+    {
         # There is no directive specified
         $Directive = 0
     }
@@ -158,7 +179,8 @@ filter __oh-my-posh_escapeStringWithSpecialChars {
     $Out = $Out | Where-Object { $_ -ne $Out[-1] }
     __oh-my-posh_debug "The completions are: $Out"
 
-    if (($Directive -band $ShellCompDirectiveError) -ne 0 ) {
+    if (($Directive -band $ShellCompDirectiveError) -ne 0 )
+    {
         # Error code.  No completion.
         __oh-my-posh_debug "Received error from custom completion go code"
         return
@@ -171,13 +193,15 @@ filter __oh-my-posh_escapeStringWithSpecialChars {
         __oh-my-posh_debug "Name: $Name Description: $Description"
 
         # Look for the longest completion so that we can format things nicely
-        if ($Longest -lt $Name.Length) {
+        if ($Longest -lt $Name.Length)
+        {
             $Longest = $Name.Length
         }
 
         # Set the description to a one space string if there is none set.
         # This is needed because the CompletionResult does not accept an empty string as argument
-        if (-Not $Description) {
+        if (-Not $Description)
+        {
             $Description = " "
         }
         @{Name="$Name";Description="$Description"}
@@ -185,14 +209,16 @@ filter __oh-my-posh_escapeStringWithSpecialChars {
 
 
     $Space = " "
-    if (($Directive -band $ShellCompDirectiveNoSpace) -ne 0 ) {
+    if (($Directive -band $ShellCompDirectiveNoSpace) -ne 0 )
+    {
         # remove the space here
         __oh-my-posh_debug "ShellCompDirectiveNoSpace is called"
         $Space = ""
     }
 
     if ((($Directive -band $ShellCompDirectiveFilterFileExt) -ne 0 ) -or
-       (($Directive -band $ShellCompDirectiveFilterDirs) -ne 0 ))  {
+       (($Directive -band $ShellCompDirectiveFilterDirs) -ne 0 ))
+    {
         __oh-my-posh_debug "ShellCompDirectiveFilterFileExt ShellCompDirectiveFilterDirs are not supported"
 
         # return here to prevent the completion of the extensions
@@ -204,21 +230,25 @@ filter __oh-my-posh_escapeStringWithSpecialChars {
         $_.Name -like "$WordToComplete*"
 
         # Join the flag back if we have an equal sign flag
-        if ( $IsEqualFlag ) {
+        if ( $IsEqualFlag )
+        {
             __oh-my-posh_debug "Join the equal sign flag back to the completion value"
             $_.Name = $Flag + "=" + $_.Name
         }
     }
 
     # we sort the values in ascending order by name if keep order isn't passed
-    if (($Directive -band $ShellCompDirectiveKeepOrder) -eq 0 ) {
+    if (($Directive -band $ShellCompDirectiveKeepOrder) -eq 0 )
+    {
         $Values = $Values | Sort-Object -Property Name
     }
 
-    if (($Directive -band $ShellCompDirectiveNoFileComp) -ne 0 ) {
+    if (($Directive -band $ShellCompDirectiveNoFileComp) -ne 0 )
+    {
         __oh-my-posh_debug "ShellCompDirectiveNoFileComp is called"
 
-        if ($Values.Length -eq 0) {
+        if ($Values.Length -eq 0)
+        {
             # Just print an empty string here so the
             # shell does not start to complete paths.
             # We cannot use CompletionResult here because
@@ -249,36 +279,44 @@ filter __oh-my-posh_escapeStringWithSpecialChars {
         # 3) ResultType     type of completion result
         # 4) ToolTip        text for the tooltip with details about the object
 
-        switch ($Mode) {
+        switch ($Mode)
+        {
 
             # bash like
-            "Complete" {
+            "Complete"
+            {
 
-                if ($Values.Length -eq 1) {
+                if ($Values.Length -eq 1)
+                {
                     __oh-my-posh_debug "Only one completion left"
 
                     # insert space after value
                     [System.Management.Automation.CompletionResult]::new($($comp.Name | __oh-my-posh_escapeStringWithSpecialChars) + $Space, "$($comp.Name)", 'ParameterValue', "$($comp.Description)")
 
-                } else {
+                } else
+                {
                     # Add the proper number of spaces to align the descriptions
-                    while($comp.Name.Length -lt $Longest) {
+                    while($comp.Name.Length -lt $Longest)
+                    {
                         $comp.Name = $comp.Name + " "
                     }
 
                     # Check for empty description and only add parentheses if needed
-                    if ($($comp.Description) -eq " " ) {
+                    if ($($comp.Description) -eq " " )
+                    {
                         $Description = ""
-                    } else {
+                    } else
+                    {
                         $Description = "  ($($comp.Description))"
                     }
 
                     [System.Management.Automation.CompletionResult]::new("$($comp.Name)$Description", "$($comp.Name)$Description", 'ParameterValue', "$($comp.Description)")
                 }
-             }
+            }
 
             # zsh like
-            "MenuComplete" {
+            "MenuComplete"
+            {
                 # insert space after value
                 # MenuComplete will automatically show the ToolTip of
                 # the highlighted value at the bottom of the suggestions.
@@ -286,7 +324,8 @@ filter __oh-my-posh_escapeStringWithSpecialChars {
             }
 
             # TabCompleteNext and in case we get something unknown
-            Default {
+            Default
+            {
                 # Like MenuComplete but we don't want to add a space here because
                 # the user need to press space anyway to get the completion.
                 # Description will not be shown because that's not possible with TabCompleteNext
@@ -302,14 +341,17 @@ Set-PSReadlineKeyHandler -Key Tab -Function MenuComplete
 
 Import-Module -Name Terminal-Icons
 
-if (Get-Command 'starship' -ErrorAction SilentlyContinue) {
-  function Invoke-Starship-PreCommand {
-    if ($global:profile_initialized -ne $true) {
-      $global:profile_initialized = $true
-      Initialize-Profile
+if (Get-Command 'starship' -ErrorAction SilentlyContinue)
+{
+    function Invoke-Starship-PreCommand
+    {
+        if ($global:profile_initialized -ne $true)
+        {
+            $global:profile_initialized = $true
+            Initialize-Profile
+        }
     }
-  }
-  Invoke-Expression (&starship init powershell)
+    Invoke-Expression (&starship init powershell)
 }
 
 neofetch
