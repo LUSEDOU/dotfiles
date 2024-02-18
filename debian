@@ -60,7 +60,7 @@ cd ~/dotfiles
 stow lazygit
 
 ## Utils
-sudo apt-get install bat nnn
+sudo apt-get install bat-cat nnn fd-find ripgrep -y
 mkdir -p ~/.local/bin
 ln -s /ust/bin/batcat ~/.local/bin/bat
 curl https://fx.wtf/install.sh | sudo sh
