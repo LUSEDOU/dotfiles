@@ -63,3 +63,4 @@ export PATH="/opt/homebrew/opt/php@7.4/sbin:$PATH"
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
+todo

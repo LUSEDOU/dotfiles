@@ -1,6 +1,8 @@
 DOTFILES="$HOME/dotfiles"
 alias dotfiles="cd $DOTFILES && nvim ."
 
+PERSONAL="$DOTFILES/personal"
+
 ZSHCONFIG="$DOTFILES/zsh/.oh-my-zsh/custom"
 
 alias zshconfig="nvim ~/.zshrc"
@@ -42,10 +44,15 @@ alias ffa="ff build apk $*"
 alias ffad="ffa --debug $*"
 
 alias dd="fvm dart $*"
+alias ddg="dd pub get $*"
 
 alias t="tree -L 2"
 alias lg="lazygit"
 # unalias github
+#
+mkcd() {
+    mkdir -p "$1" && cd "$1"
+}
 
 n ()
 {
@@ -106,3 +113,4 @@ gg() {
 }
 
 alias vim="nvim"
+alias todo="glow $PERSONAL/TODO.md -p"

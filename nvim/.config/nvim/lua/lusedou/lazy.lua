@@ -33,6 +33,11 @@ require("lazy").setup({
         dependencies = { 'nvim-lua/plenary.nvim' }
     },
 
+    -- FZF
+    {
+        'ibhagwan/fzf-lua',
+    },
+
     -- LSP
     {
         'VonHeikemen/lsp-zero.nvim',
