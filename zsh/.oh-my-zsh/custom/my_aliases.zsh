@@ -114,3 +114,6 @@ gg() {
 
 alias vim="nvim"
 alias todo="glow $PERSONAL/TODO.md -p"
+
+export NNN_FIFO="/tmp/nnn.fifo"
+export NNN_PLUG="p:preview-tui;o:xdg-open"
