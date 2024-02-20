@@ -1,6 +1,8 @@
 $Perufarma = "${HOME}\perufarma"
 $Dotfiles = "${HOME}\dotfiles"
 
+# Angular CLI
+$env:PATH = $env:PATH + ";${HOME}\AppData\Roaming\npm"
 $env:PATH = $env:PATH + ";${HOME}\.local\bin"
 $env:PATH = $env:PATH + ";${HOME}\.local\bin\scripts"
 
@@ -49,6 +51,16 @@ function mkcd
 function rmrf
 {
     Remove-Item -Recurse -Force $args[0]
+}
+function init
+{
+    # neofetch
+    # komoberic start -c "$Env:USERPROFILE\komorebi.json" --whkd
+    # $Env:USERPROFILE\AppData\Local\miniforge3\python.exe $Env:USERPROFILE\stuff\yasb\src\main.py
+
+    neofetch
+    C:\Users\dolurilu\scoop\shims\komorebic.exe start -c "$Env:USERPROFILE\komorebi.json" --whkd
+    # $Env:USERPROFILE\AppData\Local\miniforge3\python.exe $Env:USERPROFILE\stuff\yasb\src\main.py
 }
 
 Set-Alias -Name vim -Value nvim
