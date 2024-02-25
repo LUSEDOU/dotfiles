@@ -82,9 +82,15 @@ require("lazy").setup({
         'lervag/vimtex',
     },
 
+    -- Other themes
+    {
+        "rebelot/kanagawa.nvim",
+        "Shatur/neovim-ayu",
+        "Abstract-IDE/Abstract-cs",
+    },
+
     -- Theme
     {
-        -- "rebelot/kanagawa.nvim",
         "ajmwagar/vim-deus",
         dependencies = {
             {
@@ -98,6 +104,8 @@ require("lazy").setup({
         priority = 1000,
         config = function()
             vim.cmd.colorscheme 'deus'
+            vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
+            vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
         end,
     },
 

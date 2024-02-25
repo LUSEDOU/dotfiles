@@ -1,3 +1,17 @@
 gui:
   nerdFontsVersion: "3"
   border: "rounded"
+customCommands:
+  # Squash
+  - key: "s"
+    context: localBranches
+    command: "git merge --squash {{.Form.Branch}} && git commit -m {{.Form.Message | quote}}"
+    prompts:
+      - type: "input"
+        title: "Which branch do you want to squash?"
+        key: "Branch"
+        suggestions:
+          preset: "branches"
+      - type: "input"
+        title: "Commit message"
+        key: "Message"
