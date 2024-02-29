@@ -54,13 +54,9 @@ function rmrf
 }
 function init
 {
-    # neofetch
-    # komoberic start -c "$Env:USERPROFILE\komorebi.json" --whkd
-    # $Env:USERPROFILE\AppData\Local\miniforge3\python.exe $Env:USERPROFILE\stuff\yasb\src\main.py
-
     neofetch
     C:\Users\dolurilu\scoop\shims\komorebic.exe start -c "$Env:USERPROFILE\komorebi.json" --whkd
-    # $Env:USERPROFILE\AppData\Local\miniforge3\python.exe $Env:USERPROFILE\stuff\yasb\src\main.py
+    Start-Process C:\Users\dolurilu\stuff\yasb\yasb.bat -Windowstyle hidden
 }
 function which
 {
@@ -399,5 +395,4 @@ if (Get-Command 'starship' -ErrorAction SilentlyContinue)
     Invoke-Expression (&starship init powershell)
 }
 
-neofetch
 # oh-my-posh init pwsh --config '~/.mytheme.omp.json' | Invoke-Expression
