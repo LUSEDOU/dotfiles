@@ -62,6 +62,10 @@ function init
     C:\Users\dolurilu\scoop\shims\komorebic.exe start -c "$Env:USERPROFILE\komorebi.json" --whkd
     # $Env:USERPROFILE\AppData\Local\miniforge3\python.exe $Env:USERPROFILE\stuff\yasb\src\main.py
 }
+function which
+{
+    Get-Command $args[0]
+}
 
 Set-Alias -Name vim -Value nvim
 Set-Alias -Name lg -Value lazygit
