@@ -93,15 +93,15 @@ function Invoke-GitClone
     param (
         [Parameter(Mandatory=$true)]
         [string]$Repository,
-        [string]$Domain = 'github.com',
         [string]$Directory = ("$Home/stuff"),
-        [bool]$UseSSH = $false
+        [string]$Domain = 'github.com',
+        [bool]$UseSSH = $true
     )
     $url = "https://$Domain/$Repository"
 
     if ($UseSSH)
     {
-        $url = "ssh://git@$Domain/$Repository"
+        $url = "git@${Domain}:$Repository.git"
     }
     $Directory = Join-Path $Directory $Repository.Split('/')[-1]
     Write-Output 'Cloning repository in ' $Directory
