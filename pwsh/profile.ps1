@@ -84,6 +84,10 @@ function ff
 {
     fvm flutter $args
 }
+function ffr
+{
+    fvm flutter run $args
+}
 function Invoke-GitClone
 {
     param (
