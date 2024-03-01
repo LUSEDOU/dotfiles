@@ -20,7 +20,7 @@ function dotfiles
 
 function tt
 {
-    fd . $Home $Perufarma $Dotfiles -t d -d 1 -H | fzf | Set-Location
+    fd . D: D:\dolurilu $Perufarma $Perufarma\* $Dotfiles $Home $Home\stuff  -t d -d 1 -H | fzf | Set-Location
 }
 
 function perufarma
