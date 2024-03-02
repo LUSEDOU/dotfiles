@@ -42,17 +42,6 @@ return {
         }
     },
 
-    -- Flutter Tools
-    {
-        'akinsho/flutter-tools.nvim',
-        -- lazy = false,
-        dependencies = {
-            'nvim-lua/plenary.nvim',
-        },
-        config = true,
-    },
-
-
     -- VimTex
     {
         'lervag/vimtex',
@@ -86,27 +75,6 @@ return {
         end,
     },
 
-    -- Treesitter
-    {
-        'nvim-treesitter/nvim-treesitter',
-        dependencies = {
-            'nvim-treesitter/nvim-treesitter-textobjects',
-            { "nvim-treesitter/nvim-treesitter-context" },
-        },
-        build = ':TSUpdate',
-    },
-
-
-    -- NeoTest
-    {
-        "nvim-neotest/neotest",
-        dependencies = {
-            "nvim-lua/plenary.nvim",
-            "nvim-treesitter/nvim-treesitter",
-            "antoinemadec/FixCursorHold.nvim",
-            'sidlatau/neotest-dart'
-        },
-    },
 
     --- DB
     -- DadBod
