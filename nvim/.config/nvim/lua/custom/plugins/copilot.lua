@@ -1,40 +1,20 @@
 return {
     'zbirenbaum/copilot.lua',
     build = ":Copilot auth",
-    keys = function()
-        local copilot = require('copilot')
-        local suggestion = require('copilot.suggestion')
-        local panel = require('copilot.panel')
+    keys = {
+        {
+            '<C-c>',
+            function()
+                require('copilot.panel').open({
+                    position = 'right',
+                    size = 0.5,
+                })
 
-        local function remap(key, command)
-            if (suggestion.is_visible()) then
-                command()
-            else
-                local keyy = vim.api.nvim_replace_termcodes(key, true, false, true)
-                vim.api.nvim_feedkeys(keyy, "n", false)
-            end
-        end
-
-        return {
-            {
-                '<C-c>',
-                function()
-                    panel.open({
-                        position = 'right',
-                        size = 0.5,
-                    })
-
-                    vim.cmd('wincmd l')
-                end,
-                desc = "Open Copilot panel"
-            },
-            { '<Tab>', function() remap('<Tab>', suggestion.accept) end },
-            { '/',     function() remap('/', suggestion.dismiss) end },
-            { ']]',    function() remap(']]', suggestion.next) end },
-            { '[[',    function() remap('[[', suggestion.prev) end },
-
-        }
-    end,
+                vim.cmd('wincmd l')
+            end,
+            desc = "Open Copilot panel"
+        },
+    },
     lazy = false,
     opts = {
         panel = {
@@ -60,5 +40,31 @@ return {
             svn = true,
         },
     },
-    config = true
+    config = function(_, opts)
+        local copilot = require('copilot')
+        local suggestion = require('copilot.suggestion')
+        local imap = require('lusedou.keymaps').imap
+
+        copilot.setup(opts)
+
+        local function remap(key, command)
+            imap {
+                key,
+                command = function()
+                    if (suggestion.is_visible()) then
+                        command()
+                    else
+                        local keyy = vim.api.nvim_replace_termcodes(key, true, false, true)
+                        vim.api.nvim_feedkeys(keyy, "n", false)
+                    end
+                end,
+                opts = { silent = true },
+            }
+        end
+
+        remap('<Tab>', suggestion.accept)
+        remap('/', suggestion.dismiss)
+        remap(']]', suggestion.next)
+        remap('[[', suggestion.prev)
+    end
 }
