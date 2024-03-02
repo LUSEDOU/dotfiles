@@ -126,22 +126,12 @@ return {
         end
     },
 
-    -- Zen Mode
-    { 'folke/zen-mode.nvim' },
 
     -- Harpoon
 
     -- UndoTree
     { 'mbbill/undotree' },
 
-    -- Vim Fugitive
-    { 'tpope/vim-fugitive' },
-
-    -- Copilot
-    {
-        'zbirenbaum/copilot.lua',
-        build = ":Copilot auth",
-    },
 
     -- Comment
     {
@@ -149,13 +139,6 @@ return {
         opts = {}
     },
 
-
-    -- Autopairs
-    {
-        'windwp/nvim-autopairs',
-        event = "InsertEnter",
-        opts = {} -- this is equalent to setup({}) function
-    },
 
     {
         'tpope/vim-sleuth'
