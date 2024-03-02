@@ -78,6 +78,7 @@ return {
             },
         },
         priority = 1000,
+        lazy = false,
         config = function()
             vim.cmd.colorscheme 'deus'
             vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
