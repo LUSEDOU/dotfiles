@@ -1,7 +1,7 @@
 return {
     'ThePrimeagen/harpoon',
     branch = 'harpoon2',
-    keys = function()
+    keys = function(_)
         local harpoon = require("harpoon")
 
         ---comment
@@ -25,42 +25,14 @@ return {
                 end,
                 desc = "Add current file"
             },
-            { '<C-h>', select(1), desc = "Select h" },
-            { '<C-t>', select(2), desc = "Select t" },
-            { '<C-n>', select(3), desc = "Select n" },
-            { '<C-s>', select(4), desc = "Select s" },
+            { '<C-h>', function() select(1) end, desc = "Select h" },
+            { '<C-t>', function() select(2) end, desc = "Select t" },
+            { '<C-n>', function() select(3) end, desc = "Select n" },
+            { '<C-s>', function() select(4) end, desc = "Select s" },
         }
     end,
     config = function()
-        local nmap = require("lusedou.keymaps").nmap
         local harpoon = require("harpoon")
-
         harpoon:setup({})
-
-        nmap {
-            "<leader>a",
-            command = function()
-                harpoon:list():append()
-            end,
-            desc = "Add current file"
-        }
-
-        -- nmap {
-        --     "<C-e>",
-        --     command = function()
-        --         harpoon.ui:toggle_quick_menu(harpoon:list())
-        --     end,
-        --     desc = "Toggle quick menu"
-        -- }
-
-        for i, key in ipairs({ 'h', 't', 'n', 's' }) do
-            nmap {
-                "<C-" .. key .. ">",
-                command = function()
-                    harpoon:list():select(i)
-                end,
-                desc = "Select " .. key
-            }
-        end
     end
 }
