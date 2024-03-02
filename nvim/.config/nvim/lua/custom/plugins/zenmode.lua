@@ -9,6 +9,9 @@ return {
             }
         },
     },
+    keys = {
+        { '<leader>zz', function() require("zen-mode").toggle() end },
+    },
     config = function()
         local nmap = require("lusedou.keymaps").nmap
         local zenmode = require("zen-mode")
