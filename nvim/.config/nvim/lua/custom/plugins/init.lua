@@ -11,41 +11,8 @@ return {
         "folke/neodev.nvim",
         opts = {}
     },
-    -- Telescope
-    {
-        'nvim-telescope/telescope.nvim',
-        tag = '0.1.2',
-        -- or                              , branch = '0.1.x',
-        dependencies = { 'nvim-lua/plenary.nvim' }
-    },
 
     -- LSP
-    {
-        'VonHeikemen/lsp-zero.nvim',
-        branch = 'v2.x',
-        dependencies = {
-            -- LSP Support
-            { 'neovim/nvim-lspconfig' },             -- Required
-            { 'williamboman/mason.nvim' },           -- Optional
-            { 'williamboman/mason-lspconfig.nvim' }, -- Optional
-
-            -- Autocompletion
-            { 'hrsh7th/nvim-cmp' },     -- Required
-            { 'hrsh7th/cmp-nvim-lsp' }, -- Required
-            { 'hrsh7th/cmp-nvim-lua' },
-            { 'hrsh7th/cmp-buffer' },
-            { 'hrsh7th/cmp-path' },
-            { 'saadparwaiz1/cmp_luasnip' },
-
-            -- Snippets
-            { 'L3MON4D3/LuaSnip' }, -- Required
-        }
-    },
-
-    -- VimTex
-    {
-        'lervag/vimtex',
-    },
 
     -- Other themes
     {
@@ -80,27 +47,22 @@ return {
     -- DadBod
     {
         'kristijanhusak/vim-dadbod-ui',
+        enabled = false,
         dependencies = {
             {
-                "tpope/vim-dadbod", lazy = true
+                "tpope/vim-dadbod",
+                -- lazy = true
             },
             {
                 "kristijanhusak/vim-dadbod-completion",
                 ft = { 'sql', 'mysql', 'plsql' },
-                lazy = true,
+                -- lazy = true,
             },
         },
         init = function()
             vim.g.db_ui_use_nerd_fonts = 1
         end
     },
-
-
-    -- Harpoon
-
-    -- UndoTree
-    { 'mbbill/undotree' },
-
 
     -- Comment
     {
@@ -118,12 +80,4 @@ return {
         'folke/which-key.nvim', opts = {},
     },
 
-    -- Markdown Preview
-    {
-        'iamcco/markdown-preview.nvim',
-        build = 'cd app && yarn install',
-        -- dependencies = {
-        --     'preservim/vim-markdown',
-        -- }
-    },
 }
