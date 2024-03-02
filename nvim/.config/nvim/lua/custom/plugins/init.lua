@@ -43,36 +43,16 @@ return {
     },
 
 
-    --- DB
-    -- DadBod
-    {
-        'kristijanhusak/vim-dadbod-ui',
-        enabled = false,
-        dependencies = {
-            {
-                "tpope/vim-dadbod",
-                -- lazy = true
-            },
-            {
-                "kristijanhusak/vim-dadbod-completion",
-                ft = { 'sql', 'mysql', 'plsql' },
-                -- lazy = true,
-            },
-        },
-        init = function()
-            vim.g.db_ui_use_nerd_fonts = 1
-        end
-    },
-
     -- Comment
     {
-        'numToStr/Comment.nvim',
-        opts = {}
+        'numToStr/comment.nvim',
+        opts = {},
+        lazy = false,
     },
 
 
     {
-        'tpope/vim-sleuth'
+        'tpope/vim-sleuth',
     },
 
     -- Which Key
