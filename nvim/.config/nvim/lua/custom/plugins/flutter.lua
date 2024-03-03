@@ -3,7 +3,7 @@ return {
     dependencies = {
         'nvim-lua/plenary.nvim',
     },
-    lazy = true,
+    ft = 'dart',
     opts = {
         fvm = true,
         settings = {
