@@ -46,12 +46,13 @@ return {
     {
         'numToStr/Comment.nvim',
         opts = {},
-        lazy = false,
+        event = 'BufReadPre',
     },
 
 
     {
         'tpope/vim-sleuth',
+        event = 'BufReadPre',
     },
 
     -- Which Key
