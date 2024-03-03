@@ -112,11 +112,15 @@ return {
         'neovim/nvim-lspconfig',
         cmd = { 'LspInfo', 'LspInstall', 'LspStart' },
         event = { 'BufReadPre', 'BufNewFile' },
+        keys = {
+            '<leader>vca', '<leader>vd', '<leader>vws', '<leader>vrr', '<leader>vrn', '<leader>hh',
+        },
         dependencies = {
             { 'hrsh7th/cmp-nvim-lsp' },
             { 'williamboman/mason-lspconfig.nvim' },
         },
         config = function()
+            local nmap = require('lusedou.keymaps').nmap
             -- This is where all the LSP shenanigans will live
             local lsp_zero = require('lsp-zero')
             lsp_zero.extend_lspconfig()
@@ -126,6 +130,49 @@ return {
             lsp_zero.on_attach(function(client, bufnr)
                 -- see :help lsp-zero-keybindings
                 -- to learn the available actions
+                local opts = { buffer = bufnr, remap = false }
+                nmap {
+                    '<leader>vca',
+                    command = function() vim.lsp.buf.code_action() end,
+                    desc = 'view code actions',
+                    opts = opts,
+                }
+
+                nmap {
+                    '<leader>vd',
+                    command = function() vim.diagnostic.open_float() end,
+                    desc = 'view diagnostic',
+                    opts = opts,
+                }
+
+                nmap {
+                    '<leader>vws',
+                    command = function() vim.lsp.buf.workspace_symbol() end,
+                    desc = 'view workspace symbol',
+                    opts = opts,
+                }
+
+                nmap {
+                    '<leader>vrr',
+                    command = function() vim.lsp.buf.references() end,
+                    desc = 'view references',
+                    opts = opts,
+                }
+
+                nmap {
+                    '<leader>vrn',
+                    command = function() vim.lsp.buf.rename() end,
+                    desc = 'rename',
+                    opts = opts,
+                }
+
+                nmap {
+                    '<leader>hh',
+                    command = function() vim.lsp.buf.signature_help() end,
+                    desc = 'Go help',
+                    opts = opts,
+                }
+
                 lsp_zero.default_keymaps({ buffer = bufnr })
             end)
 
@@ -142,4 +189,14 @@ return {
             })
         end
     },
+    {
+        'deathbeam/lspecho.nvim',
+        opts = {
+            echo = true,  -- Echo progress messages, if set to false you can use .message() to get the current message
+            decay = 3000, -- Message decay time in milliseconds
+        },
+        event = 'BufReadPre',
+        config = true,
+    },
+
 }
