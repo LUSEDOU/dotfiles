@@ -21,6 +21,7 @@ return {
             'nvim-treesitter/nvim-treesitter-textobjects',
         },
         build = ':TSUpdate',
+        event = 'BufReadPre',
         opts = {
             ensure_installed = { "c", "lua", "vim", "vimdoc", "query", "go", "bash", 'dart', },
             sync_install = false,
