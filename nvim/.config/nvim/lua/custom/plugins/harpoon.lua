@@ -1,7 +1,7 @@
 return {
     'ThePrimeagen/harpoon',
     branch = 'harpoon2',
-    keys = function(_)
+    keys = function()
         local harpoon = require("harpoon")
 
         ---comment
@@ -33,6 +33,6 @@ return {
     end,
     config = function()
         local harpoon = require("harpoon")
-        harpoon:setup({})
+        harpoon:setup()
     end
 }
