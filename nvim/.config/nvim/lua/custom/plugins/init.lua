@@ -1,4 +1,3 @@
----
 return {
     -- TMUX
     -- {
@@ -9,10 +8,10 @@ return {
     -- Neodev
     {
         "folke/neodev.nvim",
-        opts = {}
+        opts = {},
+        ft = 'lua',
     },
 
-    -- LSP
 
     -- Other themes
     {
@@ -45,7 +44,7 @@ return {
 
     -- Comment
     {
-        'numToStr/comment.nvim',
+        'numToStr/Comment.nvim',
         opts = {},
         lazy = false,
     },
