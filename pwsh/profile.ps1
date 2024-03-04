@@ -16,6 +16,7 @@ function link ($target, $link)
 function dotfiles
 {
     Set-Location $Dotfiles
+    Invoke-Expression -Command "nvim ."
 }
 
 function tt
