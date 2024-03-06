@@ -1,0 +1,41 @@
+#!/bin/zsh
+# localtodo - search for TODOs or WIP in the current directory
+#
+if [[ $# -eq 1 ]]; then
+    selected=$1
+else
+    files=$(fd -tf 'todo|wip' -H)
+    if [[ -z $files ]]; then
+        exit 0
+    else
+        if [[ $(echo $files | wc -l) -eq 1 ]]; then
+            selected=$files
+        else
+            selected=$(echo $files | fzf)
+        fi
+    fi
+fi
+
+if [[ -z $selected ]]; then
+    exit 0
+fi
+
+# if it's md, com = glow
+if [[ $selected == *.md ]]; then
+    # check if glow is installed
+    if command -v glow &> /dev/null; then
+        glow $selected -p
+    else
+        if command -v bat &> /dev/null; then
+            bat $selected
+        else
+            cat $selected
+        fi
+    fi
+else
+    if command -v bat &> /dev/null; then
+        bat $selected --paging=always --style=plain
+    else
+        cat $selected | less
+    fi
+fi
