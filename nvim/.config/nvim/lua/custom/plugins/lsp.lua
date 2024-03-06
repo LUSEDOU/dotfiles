@@ -78,6 +78,7 @@ return {
         config = function()
             local nmap = require('lusedou.keymaps').nmap
             local imap = require('lusedou.keymaps').imap
+
             -- This is where all the LSP shenanigans will live
             local lsp_zero = require('lsp-zero')
             lsp_zero.extend_lspconfig()
@@ -139,7 +140,7 @@ return {
                     desc = 'rename',
                     opts = opts,
                 }
-
+          
                 imap {
                     '<C-h>',
                     command = vim.lsp.buf.signature_help,
