@@ -6,11 +6,6 @@ return {
 
     --- Development
     -- Neodev
-    {
-        "folke/neodev.nvim",
-        opts = {},
-        ft = 'lua',
-    },
 
 
     -- Other themes

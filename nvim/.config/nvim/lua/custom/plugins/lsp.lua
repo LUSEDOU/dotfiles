@@ -69,15 +69,18 @@ return {
         event = { 'BufReadPre', 'BufNewFile' },
         keys = {
             '<leader>vca', '<leader>vd', '<leader>vws', '<leader>vrr', '<leader>vrn', '<leader>hh', '<leader>gd', 'K',
-            '<C-h>',
+            -- '<C-h>',
         },
         dependencies = {
             { 'hrsh7th/cmp-nvim-lsp' },
             { 'williamboman/mason-lspconfig.nvim' },
+            { "folke/neodev.nvim" },
         },
         config = function()
             local nmap = require('lusedou.keymaps').nmap
             local imap = require('lusedou.keymaps').imap
+
+            require('neodev').setup({})
 
             -- This is where all the LSP shenanigans will live
             local lsp_zero = require('lsp-zero')
@@ -89,6 +92,7 @@ return {
                 -- see :help lsp-zero-keybindings
                 -- to learn the available actions
                 local opts = { buffer = bufnr, remap = false }
+                lsp_zero.default_keymaps({ buffer = bufnr })
                 nmap {
                     '<leader>vca',
                     command = vim.lsp.buf.code_action,
@@ -140,15 +144,14 @@ return {
                     desc = 'rename',
                     opts = opts,
                 }
-          
-                imap {
-                    '<C-h>',
-                    command = vim.lsp.buf.signature_help,
-                    desc = 'Go help',
-                    opts = opts,
-                }
 
-                lsp_zero.default_keymaps({ buffer = bufnr })
+                -- imap {
+                --     '<C-h>',
+                --     command = vim.lsp.buf.signature_help,
+                --     desc = 'Go help',
+                --     opts = opts,
+                -- }
+
             end)
 
             require('mason-lspconfig').setup({
