@@ -5,9 +5,6 @@ return {
     -- },
 
     --- Development
-    -- Neodev
-
-
     -- Other themes
     {
         "rebelot/kanagawa.nvim",
