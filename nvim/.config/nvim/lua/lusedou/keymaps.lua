@@ -1,6 +1,22 @@
 local M = {}
 
----set_keymap
+---@class KeymapSettingOption
+---@field noremap? boolean
+---@field silent? boolean
+
+---@class KeymapOptions
+---@field [1] string
+---@field command string | function
+---@field options? KeymapSettingOption
+---@field desc? string
+
+---@class KeymapGlobOptions
+---@field [1] table
+---@field [2] string
+---@field command string | function
+---@field options? KeymapSettingOption
+---@field desc? string
+
 ---@param mode string | table
 ---@param keymap string
 ---@param command string | function
@@ -12,75 +28,53 @@ local function set_keymap(mode, keymap, command, options, desc)
     vim.keymap.set(mode, keymap, command, options)
 end
 
---- Create a keymap for normal mode
+---Create a keymap for normal mode
 ---
---- @param tbl table
---- tbl[1] = keymap
---- tbl.command = string | function
---- tbl.options = table|nil
---- tbl.desc = string|nil
+---@param opts KeymapOptions
 ---
---- Example:
---- ```lua
---- require ('lusedou.keymaps').imap
+---Example:
+---```lua
+---require ('lusedou.keymaps').imap
 ---
---- imap {
----     '<C-j>',
----     command = '<Esc>',
----     options = { noremap = true, silent = true },
----     desc = 'Exit insert mode'
---- }
---- ```
-M.imap = function(tbl)
-    set_keymap('i', tbl[1], tbl.command, tbl.options, tbl.desc)
+---imap {
+---    '<C-j>',
+---    command = '<Esc>',
+---    options = { noremap = true, silent = true },
+---    desc = 'Exit insert mode'
+---}
+---```
+M.imap = function(opts)
+    set_keymap('i', opts[1], opts.command, opts.options, opts.desc)
 end
 
---- Create a keymap for normal mode
+---Create a keymap for normal mode
+---@param opts KeymapOptions
 ---
---- @param tbl table
---- tbl[1] = keymap
---- tbl.command = string | function
---- tbl.options = table|nil
---- tbl.desc = string|nil
+---Example:
+---```lua
+---require 'lusedou.keymaps'.nmap
 ---
---- Example:
---- ```lua
---- require ('lusedou.keymaps').nmap
----
---- nmap {
----     '<leader>q',
----     command = ':q<CR>',
----     options = { noremap = true, silent = true},
----     desc = 'Quit'
---- }
---- ```
-M.nmap = function(tbl)
-    set_keymap('n', tbl[1], tbl.command, tbl.options, tbl.desc)
+---nmap {
+---    '<leader>q',
+---    command = ':q<CR>',
+---    options = { noremap = true, silent = true},
+---    desc = 'Quit'
+---}
+---```
+M.nmap = function(opts)
+    set_keymap('n', opts[1], opts.command, opts.options, opts.desc)
 end
 
---- Create a keymap for normal mode
+---Create a keymap for the given modes
+---@param opts KeymapGlobOptions
 ---
---- @param tbl table
---- tbl[1] : string | table = keymap
---- tbl[2] = keymap
---- tbl.command = string | function
---- tbl.options = table|nil
---- tbl.desc = string|nil
+---Example:
+---```lua
+---require ('lusedou.keymaps').map
 ---
---- Example:
---- ```lua
---- require ('lusedou.keymaps').map
----
---- map {
----     { 'n', 'i' },
----     '<C-j>',
----     command = '<Esc>',
----     options = { noremap = true, silent = true },
----     desc = 'Exit insert mode'
---- }
---- ```
-M.map = function(tbl)
-    set_keymap(tbl[1], tbl[2], tbl.command, tbl.options, tbl.desc)
+---```
+M.map = function(opts)
+    set_keymap(opts[1], opts[2], opts.command, opts.options, opts.desc)
 end
 
 return M

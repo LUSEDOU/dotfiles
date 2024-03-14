@@ -8,6 +8,7 @@ return {
         ---@param item integer
         local function select(item)
             harpoon:list():select(item)
+            vim.cmd("normal! zz")
         end
 
         return {
@@ -31,8 +32,8 @@ return {
             { '<C-s>', function() select(4) end, desc = "Select s" },
         }
     end,
-    config = function()
+    config = function(_, opts)
         local harpoon = require("harpoon")
-        harpoon:setup()
-    end
+        harpoon:setup(opts)
+    end,
 }

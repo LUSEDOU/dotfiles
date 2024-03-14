@@ -69,15 +69,18 @@ return {
         event = { 'BufReadPre', 'BufNewFile' },
         keys = {
             '<leader>vca', '<leader>vd', '<leader>vws', '<leader>vrr', '<leader>vrn', '<leader>hh', '<leader>gd', 'K',
-            '<C-h>',
         },
         dependencies = {
             { 'hrsh7th/cmp-nvim-lsp' },
             { 'williamboman/mason-lspconfig.nvim' },
+            { "folke/neodev.nvim",                lazy = true },
         },
         config = function()
             local nmap = require('lusedou.keymaps').nmap
             local imap = require('lusedou.keymaps').imap
+            local map = require('lusedou.keymaps').map
+
+            require('neodev').setup({})
 
             -- This is where all the LSP shenanigans will live
             local lsp_zero = require('lsp-zero')
@@ -89,6 +92,7 @@ return {
                 -- see :help lsp-zero-keybindings
                 -- to learn the available actions
                 local opts = { buffer = bufnr, remap = false }
+
                 nmap {
                     '<leader>vca',
                     command = vim.lsp.buf.code_action,
@@ -140,7 +144,7 @@ return {
                     desc = 'rename',
                     opts = opts,
                 }
-          
+
                 imap {
                     '<C-h>',
                     command = vim.lsp.buf.signature_help,
@@ -148,7 +152,13 @@ return {
                     opts = opts,
                 }
 
-                lsp_zero.default_keymaps({ buffer = bufnr })
+                -- imap {
+                --     '<C-h>',
+                --     command = vim.lsp.buf.signature_help,
+                --     desc = 'Go help',
+                --     opts = opts,
+                -- }
+
             end)
 
             require('mason-lspconfig').setup({
@@ -158,6 +168,7 @@ return {
                     lua_ls = function()
                         -- (Optional) Configure lua language server for neovim
                         local lua_opts = lsp_zero.nvim_lua_ls()
+                        require('neodev').setup()
                         require('lspconfig').lua_ls.setup(lua_opts)
                     end,
                 }

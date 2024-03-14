@@ -1,9 +1,6 @@
 return {
     {
         "nvim-treesitter/nvim-treesitter-context",
-        dependencies = {
-            'nvim-treesitter/nvim-treesitter',
-        },
         keys = {
             {
                 '[c',
@@ -19,6 +16,7 @@ return {
         'nvim-treesitter/nvim-treesitter',
         dependencies = {
             'nvim-treesitter/nvim-treesitter-textobjects',
+            "nvim-treesitter/nvim-treesitter-context",
         },
         build = ':TSUpdate',
         event = 'BufReadPre',
