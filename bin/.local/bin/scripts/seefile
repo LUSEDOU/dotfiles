@@ -1,0 +1,75 @@
+#!/bin/zsh
+#
+version="0.1.0"
+
+# print help
+if [[ $1 == "-h" || $1 == "--help" ]]; then
+    echo """Usage:
+    seefile [options] [pattern]
+
+    META OPTIONS:
+        -h, --help      print this help message
+        -v, --version   print version
+
+    OPTIONS:
+        -p, --pattern           pattern to search for
+        -P, --(no-)preview      enable/disable preview
+        -l, --plain             pass plain to bat
+    """
+    exit 0
+fi
+
+if [[ $1 == "-v" || $1 == "--version" ]]; then
+    echo "seefile v$version"
+    exit 0
+fi
+
+# default values
+
+pattern=""
+hidden=""
+preview=""
+plain=""
+
+# parse options
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        -p|--pattern)
+            pattern=$2
+            shift
+            ;;
+        # -H|--hidden)
+        #     hidden="-H"
+        #     ;;
+        -P|--preview)
+            preview="--preview='bat {}'"
+            ;;
+        --no-preview)
+            preview=""
+            ;;
+        -l|--plain)
+            plain="--plain"
+            ;;
+        *)
+            pattern=$1
+            ;;
+    esac
+    shift
+done
+
+if [[ -z $pattern ]]; then
+    pattern=""
+fi
+
+# search files
+if [[ $preview == "" ]]; then
+    selected=$(fd $pattern -tf -H | fzf)
+else
+    selected=$(fd $pattern -tf -H | fzf --preview="bat --color=always {}")
+fi
+
+if [[ -n $selected ]]; then
+    bat $plain $selected
+fi
+
+exit 0
