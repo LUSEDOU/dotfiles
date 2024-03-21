@@ -22,6 +22,7 @@ return {
         event = 'BufReadPre',
         opts = {
             ensure_installed = { "c", "lua", "vim", "vimdoc", "query", "go", "bash", 'dart', },
+            ignore_install = { "latex" },
             sync_install = false,
             auto_install = true,
             highlight = {
