@@ -1,0 +1,167 @@
+#!/bin/zsh
+#
+version="0.2.0"
+
+help() {
+    echo """Usage:
+    seefile [options] [pattern]
+
+    META OPTIONS:
+        -h, --help      print this help message
+        -v, --version   print version
+
+    OPTIONS:
+        -p, --pattern           pattern to search for
+        -P, --(no-)preview      enable/disable preview
+        -l, --plain             pass plain to bat
+        -H, --hidden            search hidden files
+        -r, --(no-)pager        use pager
+    """
+}
+
+while :
+do
+    case $1 in
+        -h | --help)
+            help
+            exit 0
+            ;;
+        -v | --version)
+            echo "seefile v$version"
+            exit 0
+            ;;
+        -p | --pattern)
+            if [[ -z $2 ]]; then
+                echo "Error: Missing argument for $1" >&2
+                exit 1
+            fi
+            pattern=$2
+            shift 2
+            ;;
+        -P | --preview)
+            preview="--preview='bat {}'"
+            shift
+            ;;
+        --no-preview)
+            preview=""
+            shift
+            ;;
+        -l | --plain)
+            plain="--plain"
+            shift
+            ;;
+        -H | --hidden)
+            hidden="-H"
+            shift
+            ;;
+        -r | --pager)
+            pager="--paging=always"
+            shift
+            ;;
+        --no-pager)
+            pager="--paging=never"
+            shift
+            ;;
+        --)
+            shift
+            break
+            ;;
+        -*)
+            echo "Error: Unknown option: $1" >&2
+            exit 1
+            ;;
+        *)
+            break
+            ;;
+    esac
+done
+
+files=$(fd $pattern -tf $hidden)
+if [[ -z $files ]]; then
+    echo "No files found"
+    exit 1
+fi
+
+# check if only one file is found
+if [[ $(echo $files | wc -l) -eq 1 ]]; then
+    selected=$files
+else
+    selected=$(echo $files | fzf --preview="bat --color=always {}")
+fi
+
+if [[ -z $selected ]]; then
+    echo "No file selected"
+    exit 0
+fi
+
+echo $selected $plain $pager
+command bat $selected $plain $pager
+
+
+# pattern=""
+# hidden=""
+# preview=""
+# plain=""
+# pager=""
+#
+# # parse options
+# while [[ $# -gt 0 ]]; do
+#     case $1 in
+#         -p|--pattern)
+#             pattern=$2
+#             shift
+#             ;;
+#         -H|--hidden)
+#             hidden="-H"
+#             ;;
+#         -P|--preview)
+#             preview="--preview='bat {}'"
+#             ;;
+#         --no-preview)
+#             preview=""
+#             ;;
+#         -l|--plain)
+#             plain="--plain"
+#             ;;
+#         -r|--pager)
+#             pager=pager"-P=always"
+#             ;;
+#         --no-pager)
+#             pager="-P=never"
+#             ;;
+#         *)
+#             pattern=$1
+#             ;;
+#     esac
+#     shift
+# done
+#
+# if [[ -z $pattern ]]; then
+#     pattern=""
+# fi
+#
+# # search files
+# files=$(fd $pattern -tf -H)
+# if [[ -z $files ]]; then
+#     echo "No files found"
+#     exit 1
+# elif [[ $(echo $files | wc -l) -eq 1 ]]; then
+#     bat $plain $files $pager
+#     exit 0
+# else
+#     selected=$(echo $files | fzf $preview)
+#     if [[ -n $selected ]]; then
+#         bat $plain $selected $pager
+#     fi
+# fi
+# # if [[ $preview == "" ]]; then
+# #     selected=$(fd $pattern -tf -H | fzf)
+# # else
+# #     selected=$(fd $pattern -tf -H | fzf --preview="bat --color=always {}")
+# # fi
+# #
+# # if [[ -n $selected ]]; then
+# #     bat $plain $selected
+# # fi
+#
+# exit 0

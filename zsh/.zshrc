@@ -1,4 +1,3 @@
-
 export ZSH="$HOME/.oh-my-zsh"
 
 ZSH_THEME="robbyrussell"
@@ -26,17 +25,21 @@ bindkey -v # Use vim keybindings in zsh
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/Users/lusedou/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+__conda_setup="$('/home/lusedou/miniforge3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
 if [ $? -eq 0 ]; then
     eval "$__conda_setup"
 else
-    if [ -f "/Users/lusedou/miniconda3/etc/profile.d/conda.sh" ]; then
-        . "/Users/lusedou/miniconda3/etc/profile.d/conda.sh"
+    if [ -f "/home/lusedou/miniforge3/etc/profile.d/conda.sh" ]; then
+        . "/home/lusedou/miniforge3/etc/profile.d/conda.sh"
     else
-        export PATH="/Users/lusedou/miniconda3/bin:$PATH"
+        export PATH="/home/lusedou/miniforge3/bin:$PATH"
     fi
 fi
 unset __conda_setup
+
+if [ -f "/home/lusedou/miniforge3/etc/profile.d/mamba.sh" ]; then
+    . "/home/lusedou/miniforge3/etc/profile.d/mamba.sh"
+fi
 # <<< conda initialize <<<
 
 export NVM_DIR="$HOME/.nvm"
@@ -56,7 +59,10 @@ export SDKMAN_DIR="$HOME/.sdkman"
 [[ -f /Users/lusedou/.dart-cli-completion/zsh-config.zsh ]] && . /Users/lusedou/.dart-cli-completion/zsh-config.zsh || true
 ## [/Completion]
 
-export PATH="/opt/homebrew/opt/php@7.4/bin:$PATH"
-export PATH="/opt/homebrew/opt/php@7.4/sbin:$PATH"
+# export PATH="/opt/homebrew/opt/php@7.4/bin:$PATH"
+# export PATH="/opt/homebrew/opt/php@7.4/sbin:$PATH"
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+
+# opam configuration
+[[ ! -r /home/lusedou/.opam/opam-init/init.zsh ]] || source /home/lusedou/.opam/opam-init/init.zsh  > /dev/null 2> /dev/null
