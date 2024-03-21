@@ -15,6 +15,8 @@ if [[ $1 == "-h" || $1 == "--help" ]]; then
         -p, --pattern           pattern to search for
         -P, --(no-)preview      enable/disable preview
         -l, --plain             pass plain to bat
+        -H, --hidden            search hidden files
+        -r, --(no-)pager        use pager
     """
     exit 0
 fi
@@ -30,6 +32,7 @@ pattern=""
 hidden=""
 preview=""
 plain=""
+pager=""
 
 # parse options
 while [[ $# -gt 0 ]]; do
@@ -38,9 +41,9 @@ while [[ $# -gt 0 ]]; do
             pattern=$2
             shift
             ;;
-        # -H|--hidden)
-        #     hidden="-H"
-        #     ;;
+        -H|--hidden)
+            hidden="-H"
+            ;;
         -P|--preview)
             preview="--preview='bat {}'"
             ;;
@@ -49,6 +52,12 @@ while [[ $# -gt 0 ]]; do
             ;;
         -l|--plain)
             plain="--plain"
+            ;;
+        -r|--pager)
+            pager=pager"-P=always"
+            ;;
+        --no-pager)
+            pager="-P=never"
             ;;
         *)
             pattern=$1
@@ -62,14 +71,27 @@ if [[ -z $pattern ]]; then
 fi
 
 # search files
-if [[ $preview == "" ]]; then
-    selected=$(fd $pattern -tf -H | fzf)
+files=$(fd $pattern -tf -H)
+if [[ -z $files ]]; then
+    echo "No files found"
+    exit 1
+elif [[ $(echo $files | wc -l) -eq 1 ]]; then
+    bat $plain $files $pager
+    exit 0
 else
-    selected=$(fd $pattern -tf -H | fzf --preview="bat --color=always {}")
+    selected=$(echo $files | fzf $preview)
+    if [[ -n $selected ]]; then
+        bat $plain $selected $pager
+    fi
 fi
-
-if [[ -n $selected ]]; then
-    bat $plain $selected
-fi
+# if [[ $preview == "" ]]; then
+#     selected=$(fd $pattern -tf -H | fzf)
+# else
+#     selected=$(fd $pattern -tf -H | fzf --preview="bat --color=always {}")
+# fi
+#
+# if [[ -n $selected ]]; then
+#     bat $plain $selected
+# fi
 
 exit 0
