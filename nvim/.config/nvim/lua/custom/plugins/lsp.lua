@@ -158,7 +158,6 @@ return {
                 --     desc = 'Go help',
                 --     opts = opts,
                 -- }
-
             end)
 
             require('mason-lspconfig').setup({
@@ -184,5 +183,16 @@ return {
         event = 'BufReadPre',
         config = true,
     },
-
+    {
+        "j-hui/fidget.nvim",
+        opts = {
+            notification = {
+                window ={
+                    winblend = 0,
+                }
+            }
+        },
+        event = 'BufReadPre',
+        config = true,
+    }
 }
