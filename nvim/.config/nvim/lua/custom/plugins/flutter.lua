@@ -5,12 +5,13 @@ return {
     },
     ft = 'dart',
     opts = {
-        fvm = true,
-        settings = {
-            analysis = {
-                vim.fn.expand("$HOME/AppData/Local/Pub/Cache"),
-            }
-        },
+        fvm = false,
+        -- flutter_path = '/opt/flutter/bin/flutter',
+        -- settings = {
+        --     analysis = {
+        --         vim.fn.expand("$HOME/AppData/Local/Pub/Cache"),
+        --     }
+        -- },
         lsp = {
             on_attach = function(client, bufnr)
                 print('Flutter tools attached')
