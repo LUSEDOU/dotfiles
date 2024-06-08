@@ -102,8 +102,15 @@ gg() {
         return
     fi
 
+
+    local subdir="projects"
+    if [ $# -eq 2 ]; then
+        subdir="$2"
+    fi
+
     local repo_url="ssh://git@$host/$1.git"
-    local dir="$HOME/projects/$2/${1##*/}"
+    # local dir="$HOME/projects/$2/${1##*/}"
+    local dir="$HOME/$subdir/${1##*/}"
 
     if [ -d "$dir" ]; then
         echo "$dir already exists"
