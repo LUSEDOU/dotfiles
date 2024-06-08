@@ -170,6 +170,13 @@ return {
                         require('neodev').setup()
                         require('lspconfig').lua_ls.setup(lua_opts)
                     end,
+                    ocamllsp = function()
+                        -- (Optional) Configure ocaml language server for neovim
+                        -- local ocaml_opts = lsp_zero.ocaml_ls()
+                        require('lspconfig').ocamllsp.setup {
+                            on_attach = lsp_zero.on_attach,
+                        }
+                    end,
                 }
             })
         end
@@ -187,7 +194,7 @@ return {
         "j-hui/fidget.nvim",
         opts = {
             notification = {
-                window ={
+                window = {
                     winblend = 0,
                 }
             }
