@@ -175,6 +175,21 @@ return {
                         -- local ocaml_opts = lsp_zero.ocaml_ls()
                         require('lspconfig').ocamllsp.setup {
                             on_attach = lsp_zero.on_attach,
+                            manual_install = true,
+                            settings = {
+                                codelens = { enable = true },
+                                inlayHints = { enable = true },
+                                extendedHover = { enable = true },
+                                duneDiagnostics = { enable = true },
+                                syntaxDocumentation = { enable = true },
+                            },
+
+                            filetypes = {
+                                "ocaml",
+                                "ocaml.interface",
+                                "ocaml.menhir",
+                                "ocaml.cram",
+                            },
                         }
                     end,
                 }
