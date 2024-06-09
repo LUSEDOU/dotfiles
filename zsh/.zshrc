@@ -1,4 +1,3 @@
-
 export ZSH="$HOME/.oh-my-zsh"
 
 ZSH_THEME="robbyrussell"
@@ -64,3 +63,6 @@ export SDKMAN_DIR="$HOME/.sdkman"
 # export PATH="/opt/homebrew/opt/php@7.4/sbin:$PATH"
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+
+# opam configuration
+[[ ! -r /home/lusedou/.opam/opam-init/init.zsh ]] || source /home/lusedou/.opam/opam-init/init.zsh  > /dev/null 2> /dev/null
