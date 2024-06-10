@@ -1,3 +1,3 @@
 #!/bin/zsh
-# echo "Starting slstatus" &&
-# exec slstatus &&
+echo "Starting slstatus" &&
+exec slstatus &&
