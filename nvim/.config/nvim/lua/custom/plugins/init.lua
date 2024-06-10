@@ -10,6 +10,7 @@ return {
         "rebelot/kanagawa.nvim",
         "Shatur/neovim-ayu",
         "Abstract-IDE/Abstract-cs",
+        { "rose-pine/neovim", name = "rose-pine" }
     },
 
     -- Theme
