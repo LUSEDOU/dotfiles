@@ -59,6 +59,14 @@ function init
     C:\Users\dolurilu\scoop\shims\komorebic.exe start -c "$Env:USERPROFILE\komorebi.json" --whkd
     Start-Process C:\Users\dolurilu\stuff\yasb\yasb.bat -Windowstyle hidden
 }
+function restart
+{
+    komorebic.exe stop
+    Get-Process -Name komorebi | Stop-Process
+    Get-Process -Name whkd | Stop-Process
+    Get-Process -Name python | Stop-Process
+}
+
 function which
 {
     Get-Command $args[0]
