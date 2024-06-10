@@ -11,6 +11,10 @@ autocmd("BufWinEnter", {
       return
     end
 
+    vim.cmd.colorscheme 'rose-pine'
+    vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
+    vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
+
     local bufnr = vim.api.nvim_get_current_buf()
 
     vim.keymap.set("n", "<leader>ll", function()
