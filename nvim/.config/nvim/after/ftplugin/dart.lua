@@ -13,9 +13,6 @@ cmd.autocmd {
     vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
     vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
 
-    require 'flutter-tools.ui'.select
-
-
     local nmap = require('lusedou.keymaps').nmap
     local Job = require 'plenary.job'
     local ui = require 'fidget.progress'.handle
@@ -97,7 +94,7 @@ cmd.autocmd {
               if took then
                 job:report {
                   message = 'Took ' .. took,
-                  percentage = 100,
+                  done = true,
                 }
                 jobs[index] = nil
                 index = index - 1
