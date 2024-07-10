@@ -170,6 +170,20 @@ return {
                         require('neodev').setup()
                         require('lspconfig').lua_ls.setup(lua_opts)
                     end,
+                    omnisharp = function()
+                        require('lspconfig').omnisharp.setup {
+                            on_attach = lsp_zero.on_attach,
+                            -- cmd = { 'omnisharp', '--languageserver' },
+                            filetypes = { 'cs', 'cshtml', 'razor' },
+                            cmd = { "dotnet", vim.fn.stdpath "data" .. "/mason/packages/omnisharp/libexec/OmniSharp.dll" },
+                            root_dir = require('lspconfig').util.root_pattern('*.sln', '*.csproj'),
+                            settings = {
+                                enable_import_completion = true,
+                                organize_imports_on_format = true,
+                                enable_roslyn_analyzers = true,
+                            },
+                        }
+                    end,
                     ocamllsp = function()
                         -- (Optional) Configure ocaml language server for neovim
                         -- local ocaml_opts = lsp_zero.ocaml_ls()
