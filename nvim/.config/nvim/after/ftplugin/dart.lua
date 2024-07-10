@@ -143,6 +143,9 @@ cmd.autocmd {
               log_fail(data)
             end,
             on_exit = vim.schedule_wrap(function()
+              for _, job in ipairs(jobs) do
+                job:finish()
+              end
               jobs = {}
               if hasError then
                 -- split window vertically and open cwd .. '/build_runner.log'

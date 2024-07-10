@@ -21,7 +21,7 @@ return {
         build = ':TSUpdate',
         event = 'BufReadPre',
         opts = {
-            ensure_installed = { "c", "lua", "vim", "vimdoc", "query", "go", "bash", 'dart', },
+            ensure_installed = { "lua", "vim", "vimdoc", "go", "bash", 'dart', "ocaml", "markdown", "json" },
             ignore_install = { "latex" },
             sync_install = false,
             auto_install = true,
