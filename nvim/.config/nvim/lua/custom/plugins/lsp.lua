@@ -65,6 +65,7 @@ return {
                 root_dir = lspconfig.util.root_pattern("*.sln", "*.csproj"),
                 capabilities = capabilities,
                 cmd = { "dotnet", vim.fn.stdpath "data" .. "/mason/packages/omnisharp/libexec/OmniSharp.dll" },
+                filetypes = { "cs", "cshtml", "razor" },
                 enable_import_completion = true,
                 organize_imports_on_format = true,
                 enable_roslyn_analyzers = true,

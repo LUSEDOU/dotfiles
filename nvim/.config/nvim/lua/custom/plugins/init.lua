@@ -9,6 +9,7 @@ return {
         "dundargoc/fakedonalds.nvim",
         "craftzdog/solarized-osaka.nvim",
         { "rose-pine/neovim", name = "rose-pine" },
+        "Mofiqul/dracula.nvim",
         "eldritch-theme/eldritch.nvim",
         "jesseleite/nvim-noirbuddy",
         "vim-scripts/MountainDew.vim",

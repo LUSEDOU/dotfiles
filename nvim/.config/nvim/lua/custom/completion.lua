@@ -64,12 +64,12 @@ cmp.setup {
     window = {
         completion = {
             border = "rounded",
-            winhighlight = "NormalFloat:NormalFloat,FloatBorder:NormalFloat",
+            -- winhighlight = "NormalFloat:NormalFloat,FloatBorder:NormalFloat",
         },
-        documentation = {
-            border = "rounded",
-            winhighlight = "NormalFloat:NormalFloat,FloatBorder:NormalFloat",
-        },
+        -- documentation = {
+        --     border = "rounded",
+        --     winhighlight = "NormalFloat:NormalFloat,FloatBorder:NormalFloat",
+        -- },
     },
     mapping = mapping,
     ---@diagnostic disable-next-line: missing-fields
@@ -90,7 +90,7 @@ cmp.setup {
     },
     snippet = {
         expand = function(args)
-            vim.snippet.expand(args.body)
+            require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
         end,
     },
 }
