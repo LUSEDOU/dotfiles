@@ -1,7 +1,5 @@
 local M = {}
 
-M.project_theme = nil
-
 local function set_color(name)
     -- require 'transparent'.toggle(true)
     vim.cmd.colorscheme(name)
@@ -18,10 +16,18 @@ local function can_load(name)
     return vim.g.colors_name ~= name
 end
 
+M.project_theme = nil
+
 M.load_theme = function(name)
-    if M.project_theme == nil and can_load(name) then
+    local theme = M.project_theme or name
+    if theme and can_load(name) then
         set_color(name)
     end
+end
+
+M.set_project_theme = function(name)
+    M.project_theme = name
+    M.load_theme(name)
 end
 
 return M
