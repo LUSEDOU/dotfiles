@@ -1,11 +1,5 @@
 return {
-    -- TMUX
-    -- {
-    --     'christoomey/vim-tmux-navigator',
-    -- },
-
-    --- Development
-    -- Other themes
+    -- Themes
     {
         "rebelot/kanagawa.nvim",
         "Shatur/neovim-ayu",
@@ -36,24 +30,23 @@ return {
         "NTBBloodbath/sweetie.nvim",
     },
 
+    {
+        'xiyaowong/transparent.nvim',
+        priority = 1001,
+        lazy = false,
+        opts = true,
+        config = function()
+            require 'transparent'.toggle(true)
+        end
+    },
+
     -- Theme
     {
         "ajmwagar/vim-deus",
-        dependencies = {
-            {
-                'xiyaowong/transparent.nvim',
-                opts = true,
-                config = function()
-                    require('transparent').toggle(true)
-                end
-            },
-        },
         priority = 1000,
         lazy = false,
         config = function()
-            vim.cmd.colorscheme 'deus'
-            vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
-            vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
+            require 'lusedou.color'.load_theme('deus')
         end,
     },
 

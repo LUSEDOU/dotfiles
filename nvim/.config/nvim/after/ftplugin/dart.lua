@@ -1,7 +1,7 @@
 local cmd = require 'lusedou.autocommands'
 
 cmd.autocmd {
-  event = 'BufWinEnter',
+  event = 'BufEnter',
   pattern = '*.dart',
   group = 'Lusedou_Flutter',
   callback = function()
@@ -9,9 +9,7 @@ cmd.autocmd {
       return
     end
 
-    vim.cmd.colorscheme 'kanagawa'
-    vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
-    vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
+    require 'lusedou.color'.load_theme 'kanagawa'
 
     local nmap = require('lusedou.keymaps').nmap
     local Job = require 'plenary.job'

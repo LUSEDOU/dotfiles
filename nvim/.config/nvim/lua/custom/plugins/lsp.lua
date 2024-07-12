@@ -53,6 +53,9 @@ return {
                     "ocaml.menhir",
                     "ocaml.cram",
                 },
+                server_capabilities = {
+                    semanticTokensProvider = false,
+                },
                 get_language_id = function(_, ftype)
                     return ftype
                 end,
@@ -87,6 +90,16 @@ return {
 
         vim.list_extend(ensure_installed, servers_to_install)
         require("mason-tool-installer").setup { ensure_installed = ensure_installed }
+        -- local mason_lspconfig = require("mason-lspconfig")
+
+        local mason_servers = require("mason-lspconfig").get_installed_servers()
+        if mason_servers then
+            for _, server in ipairs(mason_servers) do
+                if not servers[server] then
+                    servers[server] = true
+                end
+            end
+        end
 
         for server, config in pairs(servers) do
             if config == true then
@@ -102,6 +115,24 @@ return {
 
         local disable_semantic_tokens = {
             lua = true,
+        }
+
+        local _border = "rounded"
+
+        vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
+            vim.lsp.handlers.hover, {
+                border = _border
+            }
+        )
+
+        vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(
+            vim.lsp.handlers.signature_help, {
+                border = _border
+            }
+        )
+
+        vim.diagnostic.config {
+            float = { border = _border }
         }
 
         vim.api.nvim_create_autocmd("LspAttach", {

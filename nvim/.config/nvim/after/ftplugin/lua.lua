@@ -3,7 +3,7 @@ local Lusedou_Ftplugin_Lua = vim.api.nvim_create_augroup("Lusedou_Ftplugin_Lua",
 
 local autocmd = vim.api.nvim_create_autocmd
 
-autocmd("BufWinEnter", {
+autocmd("BufEnter", {
   group = Lusedou_Ftplugin_Lua,
   pattern = "*.lua",
   callback = function()
@@ -11,9 +11,7 @@ autocmd("BufWinEnter", {
       return
     end
 
-    vim.cmd.colorscheme 'rose-pine'
-    vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
-    vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
+    require 'lusedou.color'.load_theme 'rose-pine'
 
     local bufnr = vim.api.nvim_get_current_buf()
 

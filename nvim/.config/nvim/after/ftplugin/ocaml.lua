@@ -4,7 +4,7 @@ local autocmd = require 'lusedou.autocommands'.autocmd
 -- OCaml Augroup
 autocmd {
   group = 'Lusedou.OCaml',
-  event = 'BufWinEnter',
+  event = 'BufEnter',
   pattern = '*.ml',
   callback = function()
     local nmap = require 'lusedou.keymaps'.nmap
@@ -16,9 +16,7 @@ autocmd {
     vim.opt_local.shiftwidth = 2
     vim.keymap.set("n", "<space>cp", require("ocaml.mappings").dune_promote_file, { buffer = 0 })
 
-    vim.cmd.colorscheme 'rose-pine'
-    vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
-    vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
+    require 'lusedou.color'.load_theme 'rose-pine'
 
     nmap {
       '<leader>db',

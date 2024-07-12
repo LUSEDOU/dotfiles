@@ -61,7 +61,16 @@ cmp.setup {
         { name = "buffer" },
         { name = 'copilot' }
     },
-    windows = {},
+    window = {
+        completion = {
+            border = "rounded",
+            winhighlight = "NormalFloat:NormalFloat,FloatBorder:NormalFloat",
+        },
+        documentation = {
+            border = "rounded",
+            winhighlight = "NormalFloat:NormalFloat,FloatBorder:NormalFloat",
+        },
+    },
     mapping = mapping,
     ---@diagnostic disable-next-line: missing-fields
     formatting = {
