@@ -66,9 +66,31 @@ return {
                 capabilities = capabilities,
                 cmd = { "dotnet", vim.fn.stdpath "data" .. "/mason/packages/omnisharp/libexec/OmniSharp.dll" },
                 filetypes = { "cs", "cshtml", "razor" },
-                enable_import_completion = true,
-                organize_imports_on_format = true,
-                enable_roslyn_analyzers = true,
+                settings = {
+                    FormattingOptions = {
+                        -- Enables support for reading code style, naming convention and analyzer
+                        -- settings from .editorconfig.
+                        EnableEditorConfigSupport = true,
+                        -- Specifies whether 'using' directives should be grouped and sorted during
+                        -- document formatting.
+                        OrganizeImports = true,
+                    },
+                    RoslynExtensionsOptions = {
+                        EnableDecompilationSupport = true,
+                        -- Enables support for roslyn analyzers, code fixes and rulesets.
+                        EnableAnalyzersSupport = true,
+                        -- Enables support for showing unimported types and unimported extension
+                        -- methods in completion lists. When committed, the appropriate using
+                        -- directive will be added at the top of the current file. This option can
+                        -- have a negative impact on initial completion responsiveness,
+                        -- particularly for the first few completion sessions after opening a
+                        -- solution.
+                        EnableImportCompletion = true,
+                        -- Only run analyzers against open files when 'enableRoslynAnalyzers' is
+                        -- true
+                        AnalyzeOpenDocumentsOnly = true,
+                    },
+                },
             },
             biome = true,
         }
@@ -144,6 +166,20 @@ return {
                 local settings = servers[client.name]
                 if type(settings) ~= "table" then
                     settings = {}
+                end
+
+
+                if client.supports_method('textDocument/inlayHint') then
+                    vim.keymap.set('n', '<leader>i', function()
+                        local isEnable = vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr })
+                        vim.schedule(function()
+                            print(isEnable)
+                        end)
+                        vim.lsp.inlay_hint.enable(
+                            not isEnable,
+                            { bufnr = bufnr }
+                        )
+                    end, { buffer = bufnr })
                 end
 
                 local kmap = require 'lusedou.keymaps'
