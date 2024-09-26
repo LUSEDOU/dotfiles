@@ -22,7 +22,7 @@ return {
             {
                 '<leader>a',
                 function()
-                    harpoon:list():add()
+                    harpoon:list():append()
                 end,
                 desc = "Add current file"
             },
