@@ -19,7 +19,7 @@ return {
 		local ft = {
 			lua = "stylua",
 			cs = "csharpier",
-			sql = "sql-formatter",
+			sql = "sqlfmt",
 			python = "black",
 			-- javascript = { { "prettier", "prettierd" } },
 			-- yaml = { "yamlls", "prettierd" },
@@ -62,5 +62,6 @@ return {
 			local tool = type(tools) == "string" and { tools } or tools
 			conform.formatters_by_ft[fit] = tool
 		end
+
 	end,
 }
