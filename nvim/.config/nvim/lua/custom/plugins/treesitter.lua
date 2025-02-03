@@ -11,6 +11,9 @@ return {
             },
             { ']c', function() require('treesitter-context').next() end, desc = 'Next context' },
         },
+        opts = {
+            max_lines = 3,
+        },
     },
     {
         'nvim-treesitter/nvim-treesitter',

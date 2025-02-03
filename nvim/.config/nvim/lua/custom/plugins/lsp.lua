@@ -96,6 +96,13 @@ return {
 			sourcekit = {
 				manual_install = true,
 			},
+			basedpyright = {
+				config = {
+					analysis = {
+						typeCheckingMode = "standard"
+					}
+				}
+			},
 
 			-- powershell_es = function()
 			--     local lspconfig = require('lspconfig')
@@ -107,18 +114,18 @@ return {
 			--         settings = {powershell = { codeFormatting = { Preset = 'OTBS'} } }
 			--     }
 			-- end
-			powershell_es = {
-				bundle_path = vim.fn.stdpath("data") .. "\\mason\\packages\\powershell-editor-services",
-				manual_install = true,
-				on_attach = function(_, _) end,
-				settings = {
-					powershell = {
-						codeFormatting = {
-							Preset = "OTBS",
-						},
-					},
-				},
-			},
+			-- powershell_es = {
+			-- 	bundle_path = vim.fn.stdpath("data") .. "\\mason\\packages\\powershell-editor-services",
+			-- 	manual_install = true,
+			-- 	on_attach = function(_, _) end,
+			-- 	settings = {
+			-- 		powershell = {
+			-- 			codeFormatting = {
+			-- 				Preset = "OTBS",
+			-- 			},
+			-- 		},
+			-- 	},
+			-- },
 		}
 
 		local servers_to_install = vim.tbl_filter(function(key)

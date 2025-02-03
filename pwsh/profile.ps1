@@ -1,7 +1,6 @@
-$Perufarma = "${HOME}\perufarma"
 $Dotfiles = "${HOME}\dotfiles"
+$Work = "${HOME}\work"
 
-# Angular CLI
 $env:PATH = $env:PATH + ";${HOME}\AppData\Roaming\npm"
 $env:PATH = $env:PATH + ";${HOME}\.local\bin"
 $env:PATH = $env:PATH + ";${HOME}\.local\bin\scripts"
@@ -21,18 +20,7 @@ function dotfiles
 
 function tt
 {
-    fd . D: D:\dolurilu $Perufarma $Perufarma\* $Dotfiles $Home $Home\stuff  -t d -d 1 -H | fzf | Set-Location
-}
-
-function perufarma
-{
-    Set-Location $Perufarma
-}
-
-# Set-Location $env:USERPROFILE\sally
-function sally
-{
-    Set-Location $Perufarma\sally
+    fd . $Work $Dotfiles $Home  -t d -d 2 -H | fzf | Set-Location
 }
 
 # . $profile
@@ -55,9 +43,9 @@ function rmrf
 }
 function init
 {
-    neofetch
-    C:\Users\dolurilu\scoop\shims\komorebic.exe start -c "$Env:USERPROFILE\komorebi.json" --whkd
-    Start-Process C:\Users\dolurilu\stuff\yasb\yasb.bat -Windowstyle hidden
+    # neofetch
+    # C:\Users\dolurilu\scoop\shims\komorebic.exe start -c "$Env:USERPROFILE\komorebi.json" --whkd
+    # Start-Process C:\Users\dolurilu\stuff\yasb\yasb.bat -Windowstyle hidden
 }
 function restart
 {
@@ -117,6 +105,7 @@ function Invoke-GitClone
     git clone $url $Directory
 }
 Set-Alias -Name gg -Value Invoke-GitClone
+Set-Alias -Name mamba -Value C:\Users\dolor\mambaforge\Library\bin\mamba.BAT
 
 # powershell completion for oh-my-posh                           -*- shell-script -*-
 

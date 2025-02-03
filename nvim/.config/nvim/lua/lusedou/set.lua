@@ -1,3 +1,10 @@
+
+
+-- set encoding=utf-8  " The encoding displayed.
+vim.opt.encoding = "utf-8"
+-- set fileencoding=utf-8  " The encoding written to file.
+vim.opt.fileencoding = "utf-8"
+
 vim.opt.guicursor = ""
 
 vim.opt.nu = true
@@ -15,7 +22,7 @@ vim.o.exrc = true
 
 vim.opt.swapfile = false
 vim.opt.backup = false
-vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
+--vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
 vim.opt.undofile = true
 
 vim.opt.hlsearch = false
