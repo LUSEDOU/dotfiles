@@ -1,3 +1,0 @@
-#!/bin/sh
-echo "$(date): Starting dwm" >> /home/lusedou/.config/suckless/dwm/logs/$(date +%Y-%m-%d_%H.dwm.log)
-dwm >> /home/lusedou/.config/suckless/dwm/logs/$(date +%Y-%m-%d_%H.dwm.log) 2>&1
