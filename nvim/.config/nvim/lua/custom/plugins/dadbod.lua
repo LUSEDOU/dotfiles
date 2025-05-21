@@ -1,6 +1,6 @@
 return {
   'kristijanhusak/vim-dadbod-ui',
-  -- enabled = false,
+  enabled = false,
   dependencies = {
     {
       "tpope/vim-dadbod",
