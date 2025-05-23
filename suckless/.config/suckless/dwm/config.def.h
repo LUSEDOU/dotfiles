@@ -19,12 +19,14 @@ static const char *colors[][3]      = {
 };
 
 static const char *const autostart[] = {
-	"picom", NULL,
-	"slstatus", NULL,
-	"pipewire", NULL,
-	"xrdb", ".Xresources", NULL,
-	"feh", "--bg-fill", "/home/lusedou/Pictures/wp.jpeg", NULL,
-	NULL /* terminate */
+    // "dbus-run-session", NULL,  // Start D-Bus session
+    "pipewire", NULL,          // Audio
+    "picom", NULL,
+    "slstatus", NULL,          // Status bar
+    "xrdb", "/home/lusedou/.Xresources", NULL,
+    "feh", "--bg-fill", "/home/lusedou/Pictures/wp.jpeg", NULL,
+    "st", NULL,
+    NULL /* terminate */
 };
 
 
