@@ -3,29 +3,33 @@
 /* appearance */
 static const unsigned int borderpx  = 0;        /* border pixel of windows */
 static const int startwithgaps	    = 1;	 /* 1 means gaps are used by default */
-static const unsigned int gappx     = 2;       /* default gap between windows in pixels */
+static const unsigned int gappx     = 12;       /* default gap between windows in pixels */
 static const unsigned int snap      = 8;       /* snap pixel */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
-static const int vertpad            = 2;       /* vertical padding of bar */
-static const int sidepad            = 4;       /* horizontal padding of bar */
+static const int vertpad            = 12;       /* vertical padding of bar */
+static const int sidepad            = 12;       /* horizontal padding of bar */
 static const char *fonts[]          = { "MesloLGM Nerd Font:pixelsize=18:antialias=true:autohint=true" };
 // static const char dmenufont[]       = "MesloLGM Nerd Font:pixelsize=18";
-static const char col_gray1[]       = "#222222";
-static const char col_gray2[]       = "#444444";
-static const char col_gray3[]       = "#bbbbbb";
-static const char col_gray4[]       = "#eeeeee";
-static const char col_cyan[]        = "#005577";
-static const char *colors[][3]      = {
-	/*               fg         bg         border   */
+static const char col_gray1[]          = "#000000";
+static const char col_gray2[]          = "#444444";
+static const char col_gray3[]          = "#dddfff";
+static const char col_gray4[]          = "#ffffff";
+static const char col_gray5[]          = "#805f4e";
+static const char col_cyan1[]          = "#000000";
+static const char col_cyan2[]          = "#00ffff";
+
+static const char *colors[][3]         = {
+	/*                   fg         bg       border     float    */
 	[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
-	[SchemeSel]  = { col_gray4, col_cyan,  col_cyan  },
+	[SchemeSel]  = { col_gray4, col_cyan1, col_cyan1 },
 };
 
 static const char *const autostart[] = {
     // "dbus-run-session", NULL,  // Start D-Bus session
     "pipewire", NULL,          // Audio
     "picom", NULL,
+    "dunst", NULL,
     "slstatus", NULL,          // Status bar
     "xrdb", "/home/lusedou/.Xresources", NULL,
     "feh", "--bg-fill", "/home/lusedou/Pictures/wp.jpeg", NULL,
@@ -106,10 +110,10 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_period, focusmon,       {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
-	{ MODKEY,                       XK_g,      setgaps,        {.i = -5 } },
-	{ MODKEY,                       XK_h,      setgaps,        {.i = +5 } },
-	{ MODKEY|ShiftMask,             XK_g,      setgaps,        {.i = GAP_RESET } },
-	{ MODKEY|ShiftMask,             XK_h,	   setgaps,        {.i = GAP_TOGGLE} },
+	{ MODKEY,                       XK_v,      setgaps,        {.i = -5 } },
+	{ MODKEY,                       XK_g,      setgaps,        {.i = +5 } },
+	{ MODKEY|ShiftMask,             XK_v,      setgaps,        {.i = GAP_RESET } },
+	{ MODKEY|ShiftMask,             XK_g,	   setgaps,        {.i = GAP_TOGGLE} },
         {0, 		                XK_F3, 	   spawn, 	   {.v = up}},
 	{0, 		                XK_F2, 	   spawn, 	   {.v = down}},
 	{0, 		                XK_F4, 	   spawn, 	   {.v = mut}},

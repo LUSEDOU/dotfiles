@@ -75,5 +75,5 @@ static const struct arg args[] = {
     /* Battery status and percentage */
     { battery_perc, "[ %.5s%%]", "BAT0" },  // Adjust "BAT0" to your actual battery name
 	/* function format          argument */
-	{ datetime,		"%s",           "%F %T" },
+    { datetime,		"%s",           "%F %T" },
 };
