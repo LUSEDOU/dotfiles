@@ -1,16 +1,16 @@
 /* See LICENSE file for copyright and license details. */
 
 /* appearance */
-static const unsigned int borderpx  = 1;        /* border pixel of windows */
-static const int startwithgaps	     = 0;	 /* 1 means gaps are used by default */
-static const unsigned int gappx     = 10;       /* default gap between windows in pixels */
-static const unsigned int snap      = 32;       /* snap pixel */
+static const unsigned int borderpx  = 0;        /* border pixel of windows */
+static const int startwithgaps	    = 1;	 /* 1 means gaps are used by default */
+static const unsigned int gappx     = 2;       /* default gap between windows in pixels */
+static const unsigned int snap      = 8;       /* snap pixel */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
-static const int vertpad            = 10;       /* vertical padding of bar */
-static const int sidepad            = 10;       /* horizontal padding of bar */
+static const int vertpad            = 2;       /* vertical padding of bar */
+static const int sidepad            = 4;       /* horizontal padding of bar */
 static const char *fonts[]          = { "MesloLGM Nerd Font:pixelsize=18:antialias=true:autohint=true" };
-static const char dmenufont[]       = "MesloLGM Nerd Font:size=12";
+// static const char dmenufont[]       = "MesloLGM Nerd Font:pixelsize=18";
 static const char col_gray1[]       = "#222222";
 static const char col_gray2[]       = "#444444";
 static const char col_gray3[]       = "#bbbbbb";
@@ -73,8 +73,8 @@ static const Layout layouts[] = {
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
 /* commands */
-static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[]	    = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
+static char dmenumon[2]		    = "0"; /* component of dmenucmd, manipulated in spawn() */
+static const char *dmenucmd[]	    = { "dmenu_run", NULL };
 static const char *termcmd[]	    = { "st", NULL };
 static const char *up[]             = { "amixer", "set", "Master", "10%+", NULL };
 static const char *mut[]            = { "amixer", "set", "Master", "toggle", NULL };
@@ -106,10 +106,10 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_period, focusmon,       {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
-	// { MODKEY,                       XK_minus,  setgaps,        {.i = -5 } },
-	// { MODKEY,                       XK_equal,  setgaps,        {.i = +5 } },
-	// { MODKEY|ShiftMask,             XK_minus,  setgaps,        {.i = GAP_RESET } },
-	// { MODKEY|ShiftMask,             XK_equal,  setgaps,        {.i = GAP_TOGGLE} },
+	{ MODKEY,                       XK_g,      setgaps,        {.i = -5 } },
+	{ MODKEY,                       XK_h,      setgaps,        {.i = +5 } },
+	{ MODKEY|ShiftMask,             XK_g,      setgaps,        {.i = GAP_RESET } },
+	{ MODKEY|ShiftMask,             XK_h,	   setgaps,        {.i = GAP_TOGGLE} },
         {0, 		                XK_F3, 	   spawn, 	   {.v = up}},
 	{0, 		                XK_F2, 	   spawn, 	   {.v = down}},
 	{0, 		                XK_F4, 	   spawn, 	   {.v = mut}},
