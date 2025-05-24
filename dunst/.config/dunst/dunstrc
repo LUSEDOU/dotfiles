@@ -1,5 +1,4 @@
 [global]
-	icon_theme = Papirus-Dark
 	enable_recursive_icon_lookup = true
     frame_width = 0
     monitor = 0

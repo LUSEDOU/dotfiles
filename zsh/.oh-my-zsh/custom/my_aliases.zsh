@@ -18,33 +18,33 @@ alias vimconfig="cd $VIMCONFIG && nvim ."
 TMUXCONFIG="$HOME/.tmux.conf"
 alias tmuxconfig="nvim $TMUXCONFIG"
 
-alias binconfig="cd $DOTFILES/bin && nvim ."
+# alias binconfig="cd $DOTFILES/bin && nvim ."
 
-FDK="$HOME/fvm/default/bin"
+# FDK="$HOME/fvm/default/bin"
+#
+# BELITECH="$HOME/BELITECH"
+# alias belitech="cd $BELITECH"
+#
+# BELITY="$BELITECH/belity_app"
+# alias belity="cd $BELITY"
+#
+# BELITER="$BELITECH/beliter_app"
+# alias beliter="cd $BELITER"
+#
+# BACKEND="$BELITECH/backend"
+# alias backend="cd $BACKEND"
+#
+# ANALYSIS="$BELITECH/analysis"
+# alias analysis="cd $ANALYSIS"
 
-BELITECH="$HOME/BELITECH"
-alias belitech="cd $BELITECH"
+# alias ff="fvm flutter $*"
+# alias ffr="ff run $*"
+# alias ffg="ff pub get $*"
+# alias ffa="ff build apk $*"
+# alias ffad="ffa --debug $*"
 
-BELITY="$BELITECH/belity_app"
-alias belity="cd $BELITY"
-
-BELITER="$BELITECH/beliter_app"
-alias beliter="cd $BELITER"
-
-BACKEND="$BELITECH/backend"
-alias backend="cd $BACKEND"
-
-ANALYSIS="$BELITECH/analysis"
-alias analysis="cd $ANALYSIS"
-
-alias ff="fvm flutter $*"
-alias ffr="ff run $*"
-alias ffg="ff pub get $*"
-alias ffa="ff build apk $*"
-alias ffad="ffa --debug $*"
-
-alias dd="fvm dart $*"
-alias ddg="dd pub get $*"
+# alias dd="fvm dart $*"
+# alias ddg="dd pub get $*"
 
 alias t="tree -L 2"
 alias ls="exa -T -L 1 --git --icons"
@@ -118,6 +118,21 @@ gg() {
     fi
 
     git clone "$repo_url" "$dir"
+}
+
+fcd() {
+    if [[ $# -eq 1 ]]; then
+        selected=$1
+    else
+        selected=$(find ~/projects ~/dotfiles ~ -mindepth 1 -maxdepth 1 -type d | fzf)
+    fi
+
+    if [[ -z $selected ]]; then
+        return
+    fi
+
+    echo $selected
+    cd "$selected"
 }
 
 alias vim="nvim"
