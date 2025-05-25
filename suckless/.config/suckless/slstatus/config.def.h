@@ -65,15 +65,10 @@ static const char unknown_str[] = "n/a";
  * wifi_perc           WiFi signal in percent          interface name (wlan0)
  */
 static const struct arg args[] = {
-    { cpu_perc,		"[﬙ %.5s%%]", NULL },
-    /* RAM usage percentage */
-    { ram_perc,		"[ %.5s%%]", NULL },
-    /* Disk usage percentage for root directory */
-    { disk_perc,	"[ %.5s%%]", "/" },
-    /* Battery status and percentage */
-    { battery_perc, "[ %.5s%%]", "BAT1" },  // Adjust "BAT0" to your actual battery name
-    /* Battery status and percentage */
-    { battery_perc, "[ %.5s%%]", "BAT0" },  // Adjust "BAT0" to your actual battery name
-	/* function format          argument */
-    { datetime,		"%s",           "%F %T" },
+    { cpu_perc,     "[ %.5s%%] ", NULL },    // CPU: U+E266
+    { ram_perc,     "[ %.5s%%] ", NULL },    // RAM: U+F2DB
+    { disk_perc,    "[ %.5s%%] ", "/" },     // Disk: U+F0A0
+    { battery_perc, "[ %.5s%%] ", "BAT0" },  // Battery: U+F240
+    { battery_perc, "[ %.5s%%] ", "BAT1" },  // Battery: U+F240
+    { datetime,     "%s",        "%F %T" },
 };
