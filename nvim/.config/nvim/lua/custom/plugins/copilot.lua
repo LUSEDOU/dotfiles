@@ -1,7 +1,7 @@
 return {
     'zbirenbaum/copilot.lua',
     build = ":Copilot auth",
-    enabled = false,
+    -- enabled = false,
     keys = {
         {
             '<C-c>',
