@@ -1,0 +1,45 @@
+#!/bin/bash
+
+# This script is used to copy password to clipboard.
+#
+# dmenu to select the password
+# Structure of the .password file
+# #   <name> <password>
+#
+# # Example:
+# #   github mypassword123
+#
+# I really don't care about security, so I will just copy the password to the clipboard.
+# If somebody hacks my computer, my passwords are the least of my worries.
+
+# Check if dmenu is installed
+if ! command -v dmenu &> /dev/null; then
+    echo "dmenu is not installed. Please install it to use this script."
+    exit 1
+fi
+
+# Check if the .sshh file exists in the home directory
+PASSFILE="$HOME/.password"
+if [ ! -f "$PASSFILE" ]; then
+    echo "The .password file does not exist in your home directory. Please create it."
+    exit 1
+fi
+
+# Read the .password file and format it for dmenu
+PASS_OPTIONS=$(awk '{print $1}' "$PASSFILE" | dmenu -i -p "Select a password:")
+if [ -z "$PASS_OPTIONS" ]; then
+    echo "No password selected."
+    exit 0
+fi
+
+# Get the selected password details
+PASS_DETAILS=$(grep "^$PASS_OPTIONS " "$PASSFILE")
+if [ -z "$PASS_DETAILS" ]; then
+    echo "Selected password not found in .password file."
+    exit 1
+fi
+
+# Extract the password from the selected password details
+read -r NAME PASSWORD <<< "$PASS_DETAILS"
+# Copy the password to the clipboard
+echo -n "$PASSWORD" | xclip -selection clipboard

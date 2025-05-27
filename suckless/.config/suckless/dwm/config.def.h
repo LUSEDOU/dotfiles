@@ -32,6 +32,7 @@ static const char *const autostart[] = {
     // "dbus-run-session", NULL,  // Start D-Bus session
     "pipewire", NULL,          // Audio
     "picom", NULL,
+    "mpd", NULL,
     "dunst", NULL,
     "slstatus", NULL,          // Status bar
     "xrdb", "/home/lusedou/.Xresources", NULL,
@@ -42,8 +43,7 @@ static const char *const autostart[] = {
 
 
 
-/* tagging */
-static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+static const char *tags[] = { "", "", "3", "4", "5", "6", "7", "8", "9", };
 
 static const Rule rules[] = {
 	/* xprop(1):
@@ -82,16 +82,19 @@ static const Layout layouts[] = {
 /* commands */
 static char dmenumon[2]		    = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[]	    = { "dmenu_run", NULL };
-static const char *roficmd[]	    = { "rofi", "-show", "drun", NULL };
+static const char *searchcmd[]	    = { "search",, NULL };
 static const char *termcmd[]	    = { "st", NULL };
-static const char *up[]             = { "amixer", "set", "Master", "10%+", NULL };
-static const char *mut[]            = { "amixer", "set", "Master", "toggle", NULL };
-static const char *down[]           = { "amixer", "set", "Master", "10%-", NULL };
+static const char *upvol[]          = { "amixer", "set", "Master", "10%+", NULL };
+static const char *mutvol[]         = { "amixer", "set", "Master", "toggle", NULL };
+static const char *downvol[]	    = { "amixer", "set", "Master", "10%-", NULL };
+static const char *next[]           = { "mpc", "next", NULL };
+static const char *prev[]           = { "mpc", "prev", NULL };
+
 
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
 	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
-	{ MODKEY,                       XK_i,      spawn,          {.v = roficmd } },
+	{ MODKEY,                       XK_s,      spawn,          {.v = searchcmd } },
 	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = termcmd } },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
@@ -119,9 +122,13 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_g,      setgaps,        {.i = +5 } },
 	{ MODKEY|ShiftMask,             XK_v,      setgaps,        {.i = GAP_RESET } },
 	{ MODKEY|ShiftMask,             XK_g,	   setgaps,        {.i = GAP_TOGGLE} },
-        {0, 		                XK_F3, 	   spawn, 	   {.v = up}},
-	{0, 		                XK_F2, 	   spawn, 	   {.v = down}},
-	{0, 		                XK_F4, 	   spawn, 	   {.v = mut}},
+
+        {0, 		                XK_F3, 	   spawn, 	   {.v = upvol}},
+	{0, 		                XK_F2, 	   spawn, 	   {.v = downvol}},
+	{0, 		                XK_F4, 	   spawn, 	   {.v = mutvol}},
+        {0, 		                XK_F7, 	   spawn, 	   {.v = next}},
+	{0, 		                XK_F8, 	   spawn, 	   {.v = prev}},
+
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
 	TAGKEYS(                        XK_3,                      2)

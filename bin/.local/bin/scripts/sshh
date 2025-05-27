@@ -1,0 +1,51 @@
+#!/bin/bash
+
+# This script is used to automatically log into a the server using SSH.
+#
+# dmenu to select the server
+# Structure of the .sshh file
+# #   <name> <user> <host> <keyfile>
+#
+# # Example:
+# #   myserver user myserver.com /path/to/keyfile
+#
+# Then this script will if tmux is running, create a new window and run the ssh command.
+#
+
+# Check if dmenu is installed
+if ! command -v dmenu &> /dev/null; then
+    echo "dmenu is not installed. Please install it to use this script."
+    exit 1
+fi
+
+# Check if the .sshh file exists in the home directory
+SSHH_FILE="$HOME/.sshh"
+if [ ! -f "$SSHH_FILE" ]; then
+    echo "The .sshh file does not exist in your home directory. Please create it."
+    exit 1
+fi
+
+# Read the .sshh file and format it for dmenu
+SSHH_OPTIONS=$(awk '{print $1}' "$SSHH_FILE" | dmenu -i -p "Select a server:")
+if [ -z "$SSHH_OPTIONS" ]; then
+    echo "No server selected."
+    exit 0
+fi
+
+# Get the selected server details
+SERVER_DETAILS=$(grep "^$SSHH_OPTIONS " "$SSHH_FILE")
+if [ -z "$SERVER_DETAILS" ]; then
+    echo "Selected server not found in .sshh file."
+    exit 1
+fi
+
+# Extract the user, host, and keyfile from the selected server details
+read -r NAME USER HOST KEYFILE <<< "$SERVER_DETAILS"
+# Check if tmux is running
+if pgrep -x "tmux" > /dev/null; then
+    # Create a new tmux window and run the ssh command
+    tmux new-window -n "$NAME" "ssh -i \"$KEYFILE\" \"$USER@$HOST\""
+else
+    # Run the ssh command directly
+    ssh -i "$KEYFILE" "$USER@$HOST"
+fi

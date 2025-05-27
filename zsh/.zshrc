@@ -21,7 +21,7 @@ source $ZSH/oh-my-zsh.sh
 setopt interactivecomments # Activate bash style comments
 
 bindkey -v # Use vim keybindings in zsh
-bindkey "^F" "${HOME}/.local/bin/scripts/tmux-sessionizer"
+# bindkey "^F" tmux-sessionizer
 
 # export NVM_DIR="$HOME/.nvm"
 # [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
@@ -51,3 +51,9 @@ eval "$(starship init zsh)"
 # fi
 # unset __mamba_setup
 # <<< mamba initialize <<<
+
+## [Completion]
+## Completion scripts setup. Remove the following line to uninstall
+[[ -f /home/lusedou/.dart-cli-completion/zsh-config.zsh ]] && . /home/lusedou/.dart-cli-completion/zsh-config.zsh || true
+## [/Completion]
+
