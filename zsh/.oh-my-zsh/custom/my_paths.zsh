@@ -6,4 +6,5 @@ path+=($HOME/.dotnet)
 path+=(/usr/local/go/bin)
 path+=(/usr/local/flutter/bin)
 path+=($HOME/.local/bin)
+path+=($HOME/go/bin/)
 export PATH
