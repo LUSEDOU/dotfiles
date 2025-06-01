@@ -1,3 +1,5 @@
+export EDITOR="vim"
+export VISUAL="vim"
 export ZSH="$HOME/.oh-my-zsh"
 
 ZSH_THEME="robbyrussell"
@@ -37,7 +39,7 @@ eval "$(starship init zsh)"
 
 
 # opam configuration
-# [[ ! -r /home/lusedou/.opam/opam-init/init.zsh ]] || source /home/lusedou/.opam/opam-init/init.zsh  > /dev/null 2> /dev/null
+[[ ! -r "$HOME/.opam/opam-init/init.zsh" ]] || source "$HOME/.opam/opam-init/init.zsh"  > /dev/null 2> /dev/null
 
 # >>> mamba initialize >>>
 # !! Contents within this block are managed by 'mamba shell init' !!
