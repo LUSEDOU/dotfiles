@@ -82,7 +82,7 @@ static const Layout layouts[] = {
 /* commands */
 static char dmenumon[2]		    = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[]	    = { "dmenu_run", NULL };
-static const char *searchcmd[]	    = { "search",, NULL };
+static const char *searchcmd[]	    = { "search_run", NULL };
 static const char *termcmd[]	    = { "st", NULL };
 static const char *upvol[]          = { "amixer", "set", "Master", "10%+", NULL };
 static const char *mutvol[]         = { "amixer", "set", "Master", "toggle", NULL };
@@ -94,7 +94,7 @@ static const char *prev[]           = { "mpc", "prev", NULL };
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
 	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
-	{ MODKEY,                       XK_s,      spawn,          {.v = searchcmd } },
+	{ MODKEY,                       XK_i,      spawn,          {.v = searchcmd } },
 	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = termcmd } },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
