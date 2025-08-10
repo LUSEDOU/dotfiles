@@ -75,15 +75,19 @@ static const Layout layouts[] = {
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[]	    = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
+static const char *searchcmd[]	    = { "search_run", NULL };
 static const char *termcmd[]	    = { "st", NULL };
 static const char *up[]             = { "amixer", "set", "Master", "10%+", NULL };
 static const char *mut[]            = { "amixer", "set", "Master", "toggle", NULL };
 static const char *down[]           = { "amixer", "set", "Master", "10%-", NULL };
+static const char *next[]           = { "mpc", "next", NULL };
+static const char *prev[]           = { "mpc", "prev", NULL };
 
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
 	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
 	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = termcmd } },
+	{ MODKEY|ShiftMask,             XK_i,	   spawn,          {.v = searchcmd } },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
@@ -106,13 +110,15 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_period, focusmon,       {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
-	// { MODKEY,                       XK_minus,  setgaps,        {.i = -5 } },
-	// { MODKEY,                       XK_equal,  setgaps,        {.i = +5 } },
-	// { MODKEY|ShiftMask,             XK_minus,  setgaps,        {.i = GAP_RESET } },
-	// { MODKEY|ShiftMask,             XK_equal,  setgaps,        {.i = GAP_TOGGLE} },
+	{ MODKEY,                       XK_v,      setgaps,        {.i = -5 } },
+	{ MODKEY,                       XK_g,      setgaps,        {.i = +5 } },
+	{ MODKEY|ShiftMask,             XK_v,      setgaps,        {.i = GAP_RESET } },
+	{ MODKEY|ShiftMask,             XK_g,	   setgaps,        {.i = GAP_TOGGLE} },
         {0, 		                XK_F3, 	   spawn, 	   {.v = up}},
 	{0, 		                XK_F2, 	   spawn, 	   {.v = down}},
 	{0, 		                XK_F4, 	   spawn, 	   {.v = mut}},
+	{ MODKEY|ShiftMask,		XK_a, 	   spawn, 	   {.v = prev}},
+	{ MODKEY|ShiftMask,		XK_d, 	   spawn, 	   {.v = next}},
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
 	TAGKEYS(                        XK_3,                      2)
