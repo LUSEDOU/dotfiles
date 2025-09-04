@@ -8,6 +8,7 @@ return {
 		{
 			"sidlatau/neotest-dart",
 		},
+		"nvim-neotest/neotest-go",
 	},
 	keys = {
 		{
@@ -43,6 +44,7 @@ return {
 					-- command = 'fvm flutter',
 					use_fvm = true,
 				}),
+				require("neotest-go"),
 			},
 		}
 	end,

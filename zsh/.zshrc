@@ -17,6 +17,7 @@ plugins=(
 )
 
 export ZSH_DISABLE_COMPFIX=true
+export DISABLE_MAGIC_FUNCTIONS=true
 
 source $ZSH/oh-my-zsh.sh
 
@@ -34,8 +35,8 @@ eval "$(starship init zsh)"
 
 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
-# export SDKMAN_DIR="$HOME/.sdkman"
-# [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+export SDKMAN_DIR="$HOME/.sdkman"
+[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
 
 
 # opam configuration
@@ -59,3 +60,9 @@ eval "$(starship init zsh)"
 [[ -f /home/lusedou/.dart-cli-completion/zsh-config.zsh ]] && . /home/lusedou/.dart-cli-completion/zsh-config.zsh || true
 ## [/Completion]
 
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/home/lusedou/belity/gl/google-cloud-sdk/path.zsh.inc' ]; then . '/home/lusedou/belity/gl/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/home/lusedou/belity/gl/google-cloud-sdk/completion.zsh.inc' ]; then . '/home/lusedou/belity/gl/google-cloud-sdk/completion.zsh.inc'; fi

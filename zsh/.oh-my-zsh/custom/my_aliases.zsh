@@ -79,7 +79,7 @@ n ()
 
     # The command builtin allows one to alias nnn to n, if desired, without
     # making an infinitely recursive alias
-    command nnn -e "$@"
+    command nnn -H -e "$@"
 
     [ ! -f "$NNN_TMPFILE" ] || {
         . "$NNN_TMPFILE"
@@ -124,7 +124,7 @@ fcd() {
     if [[ $# -eq 1 ]]; then
         selected=$1
     else
-        selected=$(find ~/projects ~/dotfiles ~ -mindepth 1 -maxdepth 1 -type d | fzf)
+        selected=$(find ~/projects ~/dotfiles ~/belity ~ -mindepth 1 -maxdepth 1 -type d | fzf)
     fi
 
     if [[ -z $selected ]]; then

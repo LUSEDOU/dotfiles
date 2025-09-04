@@ -1,31 +1,39 @@
 /* See LICENSE file for copyright and license details. */
 
 /* appearance */
-static const unsigned int borderpx  = 1;        /* border pixel of windows */
-static const int startwithgaps	     = 0;	 /* 1 means gaps are used by default */
-static const unsigned int gappx     = 10;       /* default gap between windows in pixels */
-static const unsigned int snap      = 32;       /* snap pixel */
+static const unsigned int borderpx  = 0;        /* border pixel of windows */
+static const int startwithgaps	    = 1;	 /* 1 means gaps are used by default */
+static const unsigned int gappx     = 12;       /* default gap between windows in pixels */
+static const unsigned int snap      = 8;       /* snap pixel */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
-static const int vertpad            = 10;       /* vertical padding of bar */
-static const int sidepad            = 10;       /* horizontal padding of bar */
-static const char *fonts[]          = { "MesloLGM Nerd Font:pixelsize=18:antialias=true:autohint=true" };
-static const char dmenufont[]       = "MesloLGM Nerd Font:size=12";
-static const char col_gray1[]       = "#222222";
-static const char col_gray2[]       = "#444444";
-static const char col_gray3[]       = "#bbbbbb";
-static const char col_gray4[]       = "#eeeeee";
-static const char col_cyan[]        = "#005577";
-static const char *colors[][3]      = {
-	/*               fg         bg         border   */
+static const int vertpad            = 12;       /* vertical padding of bar */
+static const int sidepad            = 12;       /* horizontal padding of bar */
+static const char *fonts[] = {
+    "MesloLGM Nerd Font:size=16:antialias=true:autohint=true",
+    "Symbols Nerd Font:size=16"  // Fallback for missing glyphs
+};
+// static const char dmenufont[]       = "MesloLGM Nerd Font:pixelsize=18";
+static const char col_gray1[]          = "#000000";
+static const char col_gray2[]          = "#444444";
+static const char col_gray3[]          = "#dddfff";
+static const char col_gray4[]          = "#ffffff";
+static const char col_gray5[]          = "#805f4e";
+static const char col_cyan1[]          = "#000000";
+static const char col_cyan2[]          = "#00ffff";
+
+static const char *colors[][3]         = {
+	/*                   fg         bg       border     float    */
 	[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
-	[SchemeSel]  = { col_gray4, col_cyan,  col_cyan  },
+	[SchemeSel]  = { col_gray4, col_cyan1, col_cyan1 },
 };
 
 static const char *const autostart[] = {
     // "dbus-run-session", NULL,  // Start D-Bus session
     "pipewire", NULL,          // Audio
     "picom", NULL,
+    "mpd", NULL,
+    "dunst", NULL,
     "slstatus", NULL,          // Status bar
     "xrdb", "/home/lusedou/.Xresources", NULL,
     "feh", "--bg-fill", "/home/lusedou/Pictures/wp.jpeg", NULL,
@@ -35,8 +43,7 @@ static const char *const autostart[] = {
 
 
 
-/* tagging */
-static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+static const char *tags[] = { "", "", "3", "4", "5", "6", "7", "8", "9", };
 
 static const Rule rules[] = {
 	/* xprop(1):
@@ -73,21 +80,22 @@ static const Layout layouts[] = {
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
 /* commands */
-static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[]	    = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
+static char dmenumon[2]		    = "0"; /* component of dmenucmd, manipulated in spawn() */
+static const char *dmenucmd[]	    = { "dmenu_run", NULL };
 static const char *searchcmd[]	    = { "search_run", NULL };
 static const char *termcmd[]	    = { "st", NULL };
-static const char *up[]             = { "amixer", "set", "Master", "10%+", NULL };
-static const char *mut[]            = { "amixer", "set", "Master", "toggle", NULL };
-static const char *down[]           = { "amixer", "set", "Master", "10%-", NULL };
+static const char *upvol[]          = { "amixer", "set", "Master", "10%+", NULL };
+static const char *mutvol[]         = { "amixer", "set", "Master", "toggle", NULL };
+static const char *downvol[]	    = { "amixer", "set", "Master", "10%-", NULL };
 static const char *next[]           = { "mpc", "next", NULL };
 static const char *prev[]           = { "mpc", "prev", NULL };
+
 
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
 	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
 	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = termcmd } },
-	{ MODKEY|ShiftMask,             XK_i,	   spawn,          {.v = searchcmd } },
+	{ MODKEY|ShiftMask,             XK_i,      spawn,          {.v = searchcmd } },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
@@ -114,11 +122,13 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_g,      setgaps,        {.i = +5 } },
 	{ MODKEY|ShiftMask,             XK_v,      setgaps,        {.i = GAP_RESET } },
 	{ MODKEY|ShiftMask,             XK_g,	   setgaps,        {.i = GAP_TOGGLE} },
-        {0, 		                XK_F3, 	   spawn, 	   {.v = up}},
-	{0, 		                XK_F2, 	   spawn, 	   {.v = down}},
-	{0, 		                XK_F4, 	   spawn, 	   {.v = mut}},
+
+        {0, 		                XK_F3, 	   spawn, 	   {.v = upvol}},
+	{0, 		                XK_F2, 	   spawn, 	   {.v = downvol}},
+	{0, 		                XK_F4, 	   spawn, 	   {.v = mutvol}},
 	{ MODKEY|ShiftMask,		XK_a, 	   spawn, 	   {.v = prev}},
 	{ MODKEY|ShiftMask,		XK_d, 	   spawn, 	   {.v = next}},
+
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
 	TAGKEYS(                        XK_3,                      2)

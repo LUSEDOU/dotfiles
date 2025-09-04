@@ -94,8 +94,8 @@ static const char *prev[]           = { "mpc", "prev", NULL };
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
 	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
-	{ MODKEY,                       XK_i,      spawn,          {.v = searchcmd } },
 	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = termcmd } },
+	{ MODKEY|ShiftMask,             XK_i,      spawn,          {.v = searchcmd } },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
@@ -126,8 +126,8 @@ static const Key keys[] = {
         {0, 		                XK_F3, 	   spawn, 	   {.v = upvol}},
 	{0, 		                XK_F2, 	   spawn, 	   {.v = downvol}},
 	{0, 		                XK_F4, 	   spawn, 	   {.v = mutvol}},
-        {0, 		                XK_F7, 	   spawn, 	   {.v = next}},
-	{0, 		                XK_F8, 	   spawn, 	   {.v = prev}},
+	{ MODKEY|ShiftMask,		XK_a, 	   spawn, 	   {.v = prev}},
+	{ MODKEY|ShiftMask,		XK_d, 	   spawn, 	   {.v = next}},
 
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)

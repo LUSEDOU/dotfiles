@@ -26,6 +26,6 @@ query=$(echo "" | dmenu -p "Search The Void:")
 
 if [[ -n $query ]]; then
     url="$search_engine$(echo $query | sed -e 's/ /+/g')"
-    echo $url | xargs xdg-open
+    surf "$url" &
 fi
 
