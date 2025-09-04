@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=dwm
+Comment=dwm made beautiful
+# dbus session bus is required for notifications
+Exec=dbus-run --session -- sh -c 'dwm'
+Type=Application
