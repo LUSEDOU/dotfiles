@@ -77,7 +77,7 @@ cmp.setup {
         format = function(entry, vim_item)
             -- Kind icons
             vim_item.kind = string.format('%s %s', kind_icons[vim_item.kind], vim_item.kind) -- This concatenates the icons with the name of the item kind
-            -- Source
+            -- Source with custom icons
             vim_item.menu = ({
                 buffer = "[Buffer]",
                 nvim_lsp = "[LSP]",
@@ -94,6 +94,13 @@ cmp.setup {
         end,
     },
 }
+
+cmp.setup.filetype({ 'sql', 'mysql', 'plsql' }, {
+    sources = {
+        { name = 'vim-dadbod-completion' },
+        { name = 'buffer' },
+    }
+})
 
 vim.diagnostic.config({
     -- update_in_insert = true,
