@@ -5,7 +5,7 @@ export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME="robbyrussell"
 
 plugins=(
-    git
+    # git
     history
     emoji
     encode64
@@ -17,6 +17,7 @@ plugins=(
 )
 
 export ZSH_DISABLE_COMPFIX=true
+export DISABLE_UPDATE_PROMPT=true
 export DISABLE_MAGIC_FUNCTIONS=true
 
 source $ZSH/oh-my-zsh.sh

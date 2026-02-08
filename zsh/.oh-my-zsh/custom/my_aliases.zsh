@@ -87,7 +87,7 @@ n ()
     }
 }
 
-unalias gg
+# unalias gg
 # Clone a git repository to a given directory
 gg() {
     local host="github.com"
