@@ -9,7 +9,7 @@ cmd.autocmd {
       return
     end
 
-    require 'lusedou.color'.load_theme 'kanagawa'
+    require 'lusedou.color'.load_theme 'deus'
 
     local nmap = require('lusedou.keymaps').nmap
     local Job = require 'plenary.job'
