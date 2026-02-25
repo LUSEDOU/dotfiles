@@ -1,2 +1,7 @@
 #!/bin/bash
-DISPLAY=:0 feh --no-fehbg --bg-fill --randomize ~/Pictures/wallpapers/*.{jpg,png}
+
+# Path to your wallpaper folder
+WALLPAPER_DIR="$HOME/Pictures/wallpapers"
+
+# Pick a random jpg file
+feh --no-fehbg --bg-fill --randomize "$WALLPAPER_DIR"/*.{jpg,png}
