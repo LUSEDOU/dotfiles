@@ -1,67 +1,120 @@
-#!/bin/zsh
-sudo apt install fzf
-sudo apt install fuse
-sudo apt install stow
+#!/bin/bash
+# ThinkPad T480 — Debian 12 Bookworm setup
+# Run as your regular user (lusedou). Uses sudo where needed.
+# Assumes: fresh Debian 12 install, user in sudo group, internet access.
+set -e
 
-# Node
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
-source ~/.bashrc
-nvm install node
-nvm use node
+DOTFILES="$HOME/dotfiles"
+cd "$DOTFILES"
+
+echo "==> [1/9] System packages"
+sudo apt update && sudo apt full-upgrade -y
+sudo apt install -y \
+  xorg xinit build-essential git curl wget unzip stow \
+  picom dunst feh slstatus \
+  libx11-dev libxft-dev libxinerama-dev libfreetype-dev libharfbuzz-dev \
+  mesa-utils libgl1-mesa-dri libglx-mesa0 intel-media-va-driver vainfo \
+  firefox-esr \
+  zsh tmux ripgrep fd-find fzf bat eza tldr htop ncdu \
+  python3 python3-pip python3-venv python3-dev \
+  golang-go \
+  php php-cli \
+  clang cmake ninja-build pkg-config \
+  pm-utils tlp tlp-rdw \
+  fonts-noto
+
+# bat is shipped as batcat on Debian; make it available as bat
+mkdir -p ~/.local/bin
+[ -f ~/.local/bin/bat ] || ln -s /usr/bin/batcat ~/.local/bin/bat
+
+echo "==> [2/9] ZSH + oh-my-zsh"
+sudo chsh -s /usr/bin/zsh "$USER"
+
+if [ ! -d ~/.oh-my-zsh ]; then
+  RUNZSH=no CHSH=no sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+fi
+
+echo "==> [3/9] Dotfiles (stow)"
+# Remove default files that conflict with stow
+for f in ~/.zshrc ~/.bashrc; do [ -f "$f" ] && ! [ -L "$f" ] && rm "$f"; done
+
+cd "$DOTFILES"
+for pkg in zsh bash bin starship dunst picom tmux lazygit nvim services xinitrc; do
+  stow -D "$pkg" 2>/dev/null || true
+  stow "$pkg"
+done
+
+echo "==> [4/9] Starship prompt"
+if ! command -v starship &>/dev/null; then
+  curl -sS https://starship.rs/install.sh | sh -s -- --yes
+fi
+
+echo "==> [5/9] Neovim (AppImage)"
+if ! command -v nvim &>/dev/null || [ "$(nvim --version | head -1)" \< "NVIM v0.10" ]; then
+  NVIM_URL=$(curl -s https://api.github.com/repos/neovim/neovim/releases/latest \
+    | grep -o '"browser_download_url": "[^"]*nvim-linux-x86_64.appimage"' \
+    | grep -o 'https://[^"]*')
+  wget -q "$NVIM_URL" -O /tmp/nvim.appimage
+  chmod +x /tmp/nvim.appimage
+  sudo mv /tmp/nvim.appimage /usr/local/bin/nvim
+  NVIM=/usr/local/bin/nvim
+  sudo update-alternatives --install /usr/bin/vi vi "$NVIM" 110
+  sudo update-alternatives --install /usr/bin/vim vim "$NVIM" 110
+  sudo update-alternatives --install /usr/bin/nvim nvim "$NVIM" 110
+fi
+
+echo "==> [6/9] Node.js via nvm"
+if [ ! -d ~/.nvm ]; then
+  NVM_VERSION=$(curl -s https://api.github.com/repos/nvm-sh/nvm/releases/latest | grep -o '"tag_name": "[^"]*"' | grep -o 'v[^"]*')
+  curl -o- "https://raw.githubusercontent.com/nvm-sh/nvm/${NVM_VERSION}/install.sh" | bash
+fi
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+nvm install --lts
 nvm alias default node
 npm install -g yarn
 
-# Nvim
-# get link of nvim appimage
-wget $$
-chmod u+x ./nvim.appimage
-sudo mv nvim.appimage /usr/local/bin/nvim
-CUSTOM_NVIM_PATH=/usr/local/bin/nvim
-set -u
-sudo update-alternatives --install /usr/bin/ex ex "${CUSTOM_NVIM_PATH}" 110
-sudo update-alternatives --install /usr/bin/vi vi "${CUSTOM_NVIM_PATH}" 110
-sudo update-alternatives --install /usr/bin/view view "${CUSTOM_NVIM_PATH}" 110
-sudo update-alternatives --install /usr/bin/vim vim "${CUSTOM_NVIM_PATH}" 110
-sudo update-alternatives --install /usr/bin/vimdiff vimdiff "${CUSTOM_NVIM_PATH}" 110
+echo "==> [7/9] Lazygit"
+if ! command -v lazygit &>/dev/null; then
+  LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" \
+    | grep -o '"tag_name": "v[^"]*"' | grep -o 'v[^"]*' | tr -d 'v')
+  cd /tmp
+  curl -Lo lazygit.tar.gz \
+    "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz"
+  tar xf lazygit.tar.gz lazygit
+  sudo install lazygit /usr/local/bin
+  rm -f lazygit lazygit.tar.gz
+  cd "$DOTFILES"
+fi
 
-# ZSH
-sudo apt install zsh -y
-sudo chsh -s $(which zsh)
-sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-git clone https://github.com/zdharma-continuum/fast-syntax-highlighting.git \
-   ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/fast-syntax-highlighting
-cd ~/dotfiles
-rm -rf ~/.zshrc
-stow zsh
-rm -rf ~/.bashrc
-stow bash
-curl -sS https://starship.rs/install.sh | sh
+echo "==> [8/9] Suckless (dwm, st, dmenu, slstatus)"
+stow -D suckless 2>/dev/null || true
+stow suckless
+for tool in dwm st dmenu slstatus; do
+  dir="$HOME/.config/suckless/$tool"
+  if [ -d "$dir" ] && [ -f "$dir/Makefile" ]; then
+    echo "  Building $tool..."
+    (cd "$dir" && make -s clean && make -s && sudo make install -s)
+  fi
+done
 
-# Dotfiles
-sudo apt-get install stow
-git clone https://github.com/LUSEDOU/dotfiles ~/dotfiles
+echo "==> [9/9] Flutter"
+if [ ! -d ~/flutter ]; then
+  git clone https://github.com/flutter/flutter.git -b stable ~/flutter
+fi
+if ! grep -q 'flutter/bin' ~/.zshrc 2>/dev/null; then
+  echo 'export PATH="$HOME/flutter/bin:$PATH"' >> "$DOTFILES/zsh/.zshrc"
+fi
+~/flutter/bin/flutter config --enable-linux-desktop
 
-#Tmux
-sudo apt-get install tmux
-cd ~/dotfiles
-stow -D tmux
-stow tmux
-git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+echo "==> System tweaks"
+sudo tlp start
+sudo systemctl enable hibernate.target 2>/dev/null || true
+systemctl --user daemon-reload
+systemctl --user enable change-wallpaper.timer 2>/dev/null || true
 
-# Git
-cd ~/Downloads
-LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')
-curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz"
-tar xf lazygit.tar.gz lazygit
-sudo install lazygit /usr/local/bin
-rm -rf lazygit*
-rm -rf ~/.config/lazygit/config.yml
-cd ~/dotfiles
-stow lazygit
-
-## Utils
-sudo apt-get install bat-cat nnn fd-find ripgrep -y
-mkdir -p ~/.local/bin
-ln -s /ust/bin/batcat ~/.local/bin/bat
-curl https://fx.wtf/install.sh | sudo sh
+echo ""
+echo "Done! Next steps:"
+echo "  1. Place a wallpaper at ~/Pictures/wp.jpeg"
+echo "  2. Log out and log back in (zsh will be default shell)"
+echo "  3. Start X with: startx"
