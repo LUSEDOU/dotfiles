@@ -1,5 +1,6 @@
 #!/bin/bash
 # ThinkPad T480 — Debian 12 Bookworm setup
+# Hardware: Intel Core i7-8550U | Intel UHD Graphics 620 | 16 GB RAM | NVMe 512 GB
 # Run as your regular user (lusedou). Uses sudo where needed.
 # Assumes: fresh Debian 12 install, user in sudo group, internet access.
 set -e
@@ -7,66 +8,131 @@ set -e
 DOTFILES="$HOME/dotfiles"
 cd "$DOTFILES"
 
-echo "==> [1/9] System packages"
+# ─── 1. System packages ─────────────────────────────────────────────────────
+echo "==> [1/10] System packages"
 sudo apt update && sudo apt full-upgrade -y
+
 sudo apt install -y \
   xorg xinit build-essential git curl wget unzip stow \
   picom dunst feh slstatus \
   libx11-dev libxft-dev libxinerama-dev libfreetype-dev libharfbuzz-dev \
-  mesa-utils libgl1-mesa-dri libglx-mesa0 intel-media-va-driver vainfo \
-  firefox-esr \
-  zsh tmux ripgrep fd-find fzf bat eza tldr htop ncdu \
+  mesa-utils libgl1-mesa-dri libglx-mesa0 \
+  xserver-xorg-video-intel intel-media-va-driver vainfo intel-gpu-tools \
+  firefox-esr chromium \
+  zsh tmux ripgrep fd-find fzf bat eza tldr htop ncdu inxi \
   python3 python3-pip python3-venv python3-dev \
   golang-go \
   php php-cli \
+  dotnet-sdk-8.0 \
   clang cmake ninja-build pkg-config \
-  pm-utils tlp tlp-rdw \
-  fonts-noto
+  acpi acpi-support pm-utils tlp tlp-rdw \
+  fonts-noto fonts-nerd-fonts \
+  x11-xserver-utils xbacklight
 
-# bat is shipped as batcat on Debian; make it available as bat
+# bat is shipped as batcat on Debian; expose as bat
 mkdir -p ~/.local/bin
-[ -f ~/.local/bin/bat ] || ln -s /usr/bin/batcat ~/.local/bin/bat
+[ -e ~/.local/bin/bat ] || ln -s /usr/bin/batcat ~/.local/bin/bat
 
-echo "==> [2/9] ZSH + oh-my-zsh"
+# ─── 2. Pin Mesa to Debian 12 (23.x) — prevents UHD 620 crashes ─────────────
+echo "==> [2/10] Pin Mesa 23.x (Intel UHD 620 stability)"
+sudo tee /etc/apt/preferences.d/mesa-pin > /dev/null << 'EOF'
+# Mesa 25.x from backports or third-party sources causes GPU segfaults
+# on Intel UHD 620 (Kaby Lake Refresh). Keep Debian 12 Bookworm's Mesa 23.x.
+Package: *mesa* *libgl* *libglx* *libgles* *libegl* *libvulkan* *libdrm*
+Pin: release n=bookworm
+Pin-Priority: 1001
+EOF
+sudo apt-mark hold libgl1-mesa-dri libglx-mesa0 2>/dev/null || true
+
+# ─── 3. X11 Intel DRI3 config (TearFree + SNA for UHD 620) ──────────────────
+echo "==> [3/10] X11 Intel driver config"
+sudo mkdir -p /etc/X11/xorg.conf.d
+sudo tee /etc/X11/xorg.conf.d/20-intel.conf > /dev/null << 'EOF'
+# Intel UHD 620 — Kaby Lake Refresh (ThinkPad T480)
+# DRI3 + SNA + TearFree prevents tearing without a compositor;
+# combined with picom/glx this gives stable, tear-free rendering.
+Section "Device"
+    Identifier  "Intel UHD 620"
+    Driver      "intel"
+    Option      "DRI"          "3"
+    Option      "AccelMethod"  "sna"
+    Option      "TearFree"     "true"
+    Option      "TripleBuffer" "true"
+EndSection
+EOF
+
+# ─── 4. TLP — T480-optimised battery & power ────────────────────────────────
+echo "==> [4/10] TLP (ThinkPad T480 battery thresholds)"
+sudo tee /etc/tlp.d/50-t480.conf > /dev/null << 'EOF'
+# ThinkPad T480 — TLP overrides
+# Battery charge thresholds: start at 40%, stop at 80%
+# Keeps the internal battery healthy for daily plugged-in coding use.
+START_CHARGE_THRESH_BAT0=40
+STOP_CHARGE_THRESH_BAT0=80
+START_CHARGE_THRESH_BAT1=40
+STOP_CHARGE_THRESH_BAT1=80
+
+# CPU governor: schedutil is best for Kaby Lake Refresh on Debian 12
+CPU_SCALING_GOVERNOR_ON_AC=performance
+CPU_SCALING_GOVERNOR_ON_BAT=schedutil
+
+# Intel HWP (Hardware P-State)
+CPU_HWP_ON_AC=performance
+CPU_HWP_ON_BAT=balance_power
+
+# PCIe ASPM — aggressive power saving on battery
+PCIE_ASPM_ON_BAT=powersupersave
+
+# WiFi power saving on battery
+WIFI_PWR_ON_BAT=on
+EOF
+sudo tlp start
+
+# ─── 5. ZSH + oh-my-zsh ─────────────────────────────────────────────────────
+echo "==> [5/10] ZSH + oh-my-zsh"
 sudo chsh -s /usr/bin/zsh "$USER"
 
 if [ ! -d ~/.oh-my-zsh ]; then
   RUNZSH=no CHSH=no sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 fi
 
-echo "==> [3/9] Dotfiles (stow)"
-# Remove default files that conflict with stow
+# ─── 6. Dotfiles (stow) ──────────────────────────────────────────────────────
+echo "==> [6/10] Dotfiles (stow)"
 for f in ~/.zshrc ~/.bashrc; do [ -f "$f" ] && ! [ -L "$f" ] && rm "$f"; done
 
 cd "$DOTFILES"
-for pkg in zsh bash bin starship dunst picom tmux lazygit nvim services xinitrc; do
+for pkg in zsh bash bin starship dunst picom tmux lazygit nvim services xinitrc suckless; do
   stow -D "$pkg" 2>/dev/null || true
   stow "$pkg"
 done
 
-echo "==> [4/9] Starship prompt"
+# ─── 7. Starship prompt ──────────────────────────────────────────────────────
+echo "==> [7/10] Starship prompt"
 if ! command -v starship &>/dev/null; then
   curl -sS https://starship.rs/install.sh | sh -s -- --yes
 fi
 
-echo "==> [5/9] Neovim (AppImage)"
-if ! command -v nvim &>/dev/null || [ "$(nvim --version | head -1)" \< "NVIM v0.10" ]; then
-  NVIM_URL=$(curl -s https://api.github.com/repos/neovim/neovim/releases/latest \
-    | grep -o '"browser_download_url": "[^"]*nvim-linux-x86_64.appimage"' \
-    | grep -o 'https://[^"]*')
+# ─── 8. Neovim (AppImage — always latest stable) ────────────────────────────
+echo "==> [8/10] Neovim (AppImage)"
+NVIM_URL=$(curl -s https://api.github.com/repos/neovim/neovim/releases/latest \
+  | grep -o '"browser_download_url": "[^"]*nvim-linux-x86_64.appimage"' \
+  | grep -o 'https://[^"]*')
+if [ -n "$NVIM_URL" ]; then
   wget -q "$NVIM_URL" -O /tmp/nvim.appimage
   chmod +x /tmp/nvim.appimage
   sudo mv /tmp/nvim.appimage /usr/local/bin/nvim
   NVIM=/usr/local/bin/nvim
-  sudo update-alternatives --install /usr/bin/vi vi "$NVIM" 110
-  sudo update-alternatives --install /usr/bin/vim vim "$NVIM" 110
-  sudo update-alternatives --install /usr/bin/nvim nvim "$NVIM" 110
+  for alt in vi vim nvim; do
+    sudo update-alternatives --install /usr/bin/$alt $alt "$NVIM" 110
+  done
 fi
 
-echo "==> [6/9] Node.js via nvm"
+# ─── 9. Node.js via nvm (avoids apt nodejs conflicts) ────────────────────────
+echo "==> [9/10] Node.js via nvm"
 if [ ! -d ~/.nvm ]; then
-  NVM_VERSION=$(curl -s https://api.github.com/repos/nvm-sh/nvm/releases/latest | grep -o '"tag_name": "[^"]*"' | grep -o 'v[^"]*')
-  curl -o- "https://raw.githubusercontent.com/nvm-sh/nvm/${NVM_VERSION}/install.sh" | bash
+  NVM_VER=$(curl -s https://api.github.com/repos/nvm-sh/nvm/releases/latest \
+    | grep -o '"tag_name": "[^"]*"' | grep -o 'v[^"]*')
+  curl -o- "https://raw.githubusercontent.com/nvm-sh/nvm/${NVM_VER}/install.sh" | bash
 fi
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
@@ -74,22 +140,23 @@ nvm install --lts
 nvm alias default node
 npm install -g yarn
 
-echo "==> [7/9] Lazygit"
+# ─── 10. Lazygit, Flutter, suckless build ─────────────────────────────────
+echo "==> [10/10] Lazygit + Flutter + suckless build"
+
+# Lazygit
 if ! command -v lazygit &>/dev/null; then
-  LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" \
-    | grep -o '"tag_name": "v[^"]*"' | grep -o 'v[^"]*' | tr -d 'v')
+  LG_VER=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" \
+    | grep -o '"tag_name": "v[^"]*"' | grep -o '[0-9][^"]*')
   cd /tmp
   curl -Lo lazygit.tar.gz \
-    "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz"
+    "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${LG_VER}_Linux_x86_64.tar.gz"
   tar xf lazygit.tar.gz lazygit
   sudo install lazygit /usr/local/bin
   rm -f lazygit lazygit.tar.gz
   cd "$DOTFILES"
 fi
 
-echo "==> [8/9] Suckless (dwm, st, dmenu, slstatus)"
-stow -D suckless 2>/dev/null || true
-stow suckless
+# Suckless: build from dotfiles (config.h + patches already applied)
 for tool in dwm st dmenu slstatus; do
   dir="$HOME/.config/suckless/$tool"
   if [ -d "$dir" ] && [ -f "$dir/Makefile" ]; then
@@ -98,23 +165,29 @@ for tool in dwm st dmenu slstatus; do
   fi
 done
 
-echo "==> [9/9] Flutter"
+# Flutter
 if [ ! -d ~/flutter ]; then
   git clone https://github.com/flutter/flutter.git -b stable ~/flutter
 fi
-if ! grep -q 'flutter/bin' ~/.zshrc 2>/dev/null; then
-  echo 'export PATH="$HOME/flutter/bin:$PATH"' >> "$DOTFILES/zsh/.zshrc"
-fi
 ~/flutter/bin/flutter config --enable-linux-desktop
 
-echo "==> System tweaks"
-sudo tlp start
+# ─── System services ─────────────────────────────────────────────────────────
 sudo systemctl enable hibernate.target 2>/dev/null || true
 systemctl --user daemon-reload
 systemctl --user enable change-wallpaper.timer 2>/dev/null || true
 
+# ─── Summary ──────────────────────────────────────────────────────────────────
 echo ""
-echo "Done! Next steps:"
-echo "  1. Place a wallpaper at ~/Pictures/wp.jpeg"
-echo "  2. Log out and log back in (zsh will be default shell)"
-echo "  3. Start X with: startx"
+echo "┌─────────────────────────────────────────────────────┐"
+echo "│  saturn setup complete                              │"
+echo "│                                                     │"
+echo "│  Next steps:                                        │"
+echo "│  1. Place wallpaper at ~/Pictures/wp.jpeg           │"
+echo "│  2. Re-login (zsh becomes default shell)            │"
+echo "│  3. startx                                          │"
+echo "│                                                     │"
+echo "│  Notes:                                             │"
+echo "│  • Mesa 23.x pinned — do NOT apt upgrade mesa*     │"
+echo "│  • Battery thresholds: 40%–80% (T480 longevity)    │"
+echo "│  • Firefox: use 'ff' (GPU process disabled)        │"
+echo "└─────────────────────────────────────────────────────┘"

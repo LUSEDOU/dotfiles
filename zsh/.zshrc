@@ -1,6 +1,12 @@
-export EDITOR="vim"
-export VISUAL="vim"
+export EDITOR="nvim"
+export VISUAL="nvim"
 export ZSH="$HOME/.oh-my-zsh"
+
+# PATH
+export PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/flutter/bin:$PATH"
+export PATH="$HOME/go/bin:$PATH"
+export PATH="/usr/local/go/bin:$PATH"
 
 ZSH_THEME="robbyrussell"
 
@@ -67,3 +73,11 @@ if [ -f '/home/lusedou/belity/gl/google-cloud-sdk/path.zsh.inc' ]; then . '/home
 
 # The next line enables shell command completion for gcloud.
 if [ -f '/home/lusedou/belity/gl/google-cloud-sdk/completion.zsh.inc' ]; then . '/home/lusedou/belity/gl/google-cloud-sdk/completion.zsh.inc'; fi
+
+# bun completions
+[ -s "/home/lusedou/.bun/_bun" ] && source "/home/lusedou/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+alias firefox="ff"

@@ -1,0 +1,11 @@
+#!/bin/bash
+# Stable wrapper for Firefox ESR on Intel UHD 620 + Debian 12 (Mesa 23.x)
+# Mesa 23.x on Debian 12 is stable with Intel UHD 620 — no software fallback needed.
+export MOZ_ENABLE_WAYLAND=0
+export GDK_BACKEND=x11
+export MOZ_WEBRENDER=0
+export MOZ_DISABLE_RDD=1
+export LIBGL_ALWAYS_SOFTWARE=0
+export MOZ_DISABLE_GPU_PROCESS=1
+
+exec /usr/bin/firefox-esr "$@"
