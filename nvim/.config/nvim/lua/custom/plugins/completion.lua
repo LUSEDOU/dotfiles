@@ -10,8 +10,12 @@ return {
       "hrsh7th/cmp-buffer",
       { "L3MON4D3/LuaSnip", build = "make install_jsregexp" },
       "saadparwaiz1/cmp_luasnip",
+      "zbirenbaum/copilot-cmp",
     },
     config = function()
+      pcall(function()
+        require("copilot_cmp").setup()
+      end)
       require "custom.completion"
     end,
   },

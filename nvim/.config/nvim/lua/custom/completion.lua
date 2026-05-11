@@ -50,17 +50,21 @@ local kind_icons = {
     TypeParameter = "󰅲",
 }
 
-
-cmp.setup {
-    sources = cmp.config.sources {
+local sources = {
         { name = 'nvim_lsp' },
         { name = 'luasnip', option = { show_autosnippets = false } },
         { name = 'nvim_cmp' },
         -- { name = "cody" },
         { name = "path" },
         { name = "buffer" },
-        { name = 'copilot' }
-    },
+}
+
+if pcall(require, "copilot_cmp") then
+    table.insert(sources, { name = "copilot" })
+end
+
+cmp.setup {
+    sources = cmp.config.sources(sources),
     window = {
         completion = {
             border = "rounded",

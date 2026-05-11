@@ -13,12 +13,16 @@ if copilot_node == nil or copilot_node == "" then
 	copilot_node = "node"
 end
 
-local copilot_server = vim.env.NVIM_COPILOT_USE_BINARY == "1" and { type = "binary" } or { type = "nodejs" }
+local use_binary = vim.env.NVIM_COPILOT_USE_BINARY == "1"
+if vim.fn.has("win32") == 1 and vim.env.NVIM_COPILOT_USE_BINARY ~= "0" then
+	use_binary = true
+end
+local copilot_server = use_binary and { type = "binary" } or { type = "nodejs" }
 
 return {
 	"zbirenbaum/copilot.lua",
-	-- Do not run auth on every Lazy sync; sign in manually with :Copilot auth
-	lazy = false,
+	event = "InsertEnter",
+	cmd = "Copilot",
 	keys = {
 		{
 			"<C-c>",
@@ -37,13 +41,13 @@ return {
 		server = copilot_server,
 		copilot_node_command = copilot_node,
 		panel = {
-			auto_refresh = true,
+			auto_refresh = false,
 			layout = {
 				position = "right",
 			},
 		},
 		suggestion = {
-			debounce = 50,
+			debounce = 120,
 			auto_trigger = true,
 			keymap = {
 				accept = nil,

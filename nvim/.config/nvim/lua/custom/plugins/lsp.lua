@@ -61,13 +61,9 @@ return {
 		local omni_exe = find_omnisharp_executable()
 		local omni_cmd = omni_exe and {
 			omni_exe,
-			"-z",
+			"--languageserver",
 			"--hostPID",
 			tostring(vim.fn.getpid()),
-			"DotNet:enablePackageRestore=false",
-			"--encoding",
-			"utf-8",
-			"--languageserver",
 		} or nil
 
 		--- csharp-ls: `dotnet tool install --global csharp-ls`. Set `$env:NVIM_USE_CSHARP_LS=1` to use it
@@ -188,14 +184,20 @@ return {
 			omnisharp = vim.tbl_extend("force", {
 				filetypes = omni_filetypes,
 				manual_install = true,
+				flags = {
+					debounce_text_changes = 200,
+				},
 				settings = {
+					MsBuild = {
+						LoadProjectsOnDemand = true,
+					},
 					FormattingOptions = {
 						EnableEditorConfigSupport = true,
 						OrganizeImports = true,
 					},
 					RoslynExtensionsOptions = {
-						EnableDecompilationSupport = true,
-						EnableAnalyzersSupport = true,
+						EnableDecompilationSupport = false,
+						EnableAnalyzersSupport = false,
 						EnableImportCompletion = true,
 						AnalyzeOpenDocumentsOnly = true,
 					},
