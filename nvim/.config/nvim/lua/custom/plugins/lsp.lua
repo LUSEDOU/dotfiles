@@ -12,6 +12,69 @@ return {
 		-- Register default `vim.lsp.config` entries from nvim-lspconfig.
 		require("lspconfig")
 
+		-- Windows: GUI Neovim/Cursor often omits Scoop shims and `dotnet tool` globals from PATH.
+		local function prepend_path_dir(dir)
+			if not dir or vim.uv.fs_stat(dir) == nil then
+				return
+			end
+			dir = vim.fs.normalize(dir)
+			local sep = vim.fn.has("win32") == 1 and ";" or ":"
+			local path = vim.env.PATH or ""
+			if path:sub(1, #dir + #sep) == dir .. sep then
+				return
+			end
+			vim.env.PATH = dir .. sep .. path
+		end
+
+		if vim.fn.has("win32") == 1 and vim.env.USERPROFILE then
+			local home = vim.env.USERPROFILE
+			prepend_path_dir(vim.fs.joinpath(home, "scoop", "shims"))
+			prepend_path_dir(vim.fs.joinpath(home, ".dotnet", "tools"))
+		end
+
+		--- OmniSharp: `scoop install omnisharp` (not Mason). Optional full path: `$env:NVIM_OMNISHARP`.
+		local function find_omnisharp_executable()
+			local envp = vim.env.NVIM_OMNISHARP
+			if envp and envp ~= "" then
+				local p = vim.fs.normalize(envp)
+				if vim.uv.fs_stat(p) then
+					return p
+				end
+			end
+			if vim.fn.has("win32") == 1 and vim.env.USERPROFILE then
+				for _, name in ipairs({ "OmniSharp.exe", "omnisharp.exe" }) do
+					local p = vim.fs.joinpath(vim.env.USERPROFILE, "scoop", "shims", name)
+					if vim.uv.fs_stat(p) then
+						return vim.fs.normalize(p)
+					end
+				end
+			end
+			for _, name in ipairs({ "OmniSharp", "omnisharp" }) do
+				local p = vim.fn.exepath(name)
+				if p ~= "" then
+					return p
+				end
+			end
+			return nil
+		end
+
+		local omni_exe = find_omnisharp_executable()
+		local omni_cmd = omni_exe and {
+			omni_exe,
+			"-z",
+			"--hostPID",
+			tostring(vim.fn.getpid()),
+			"DotNet:enablePackageRestore=false",
+			"--encoding",
+			"utf-8",
+			"--languageserver",
+		} or nil
+
+		--- csharp-ls: `dotnet tool install --global csharp-ls`. Set `$env:NVIM_USE_CSHARP_LS=1` to use it
+		--- for `cs` buffers; OmniSharp is then limited to `vb`, `cshtml`, `razor` so two servers do not fight.
+		local use_csharp_ls = vim.env.NVIM_USE_CSHARP_LS == "1"
+		local omni_filetypes = use_csharp_ls and { "vb", "cshtml", "razor" } or { "cs", "vb", "cshtml", "razor" }
+
 		local capabilities = nil
 
 		if pcall(require, "cmp_nvim_lsp") then
@@ -121,9 +184,10 @@ return {
 					return ftype
 				end,
 			},
-			--- OmniSharp Roslyn: Mason package `omnisharp`; cmd/filetypes come from nvim-lspconfig defaults.
-			omnisharp = {
-				filetypes = { "cs", "vb", "cshtml", "razor" },
+			--- OmniSharp: install with `scoop install omnisharp` (see `find_omnisharp_executable` above).
+			omnisharp = vim.tbl_extend("force", {
+				filetypes = omni_filetypes,
+				manual_install = true,
 				settings = {
 					FormattingOptions = {
 						EnableEditorConfigSupport = true,
@@ -136,7 +200,7 @@ return {
 						AnalyzeOpenDocumentsOnly = true,
 					},
 				},
-			},
+			}, omni_cmd and { cmd = omni_cmd } or {}),
 			--- TypeScript / JavaScript (Deno projects are skipped by upstream `root_dir` logic).
 			vtsls = {},
 			--- Angular (vscode-ng-language-service); needs `node_modules` with @angular/language-service.
@@ -160,15 +224,21 @@ return {
 				enable = false,
 				manual_install = true,
 			},
-			basedpyright = {
-				enable = false,
-				config = {
-					analysis = {
-						typeCheckingMode = "standard",
-					},
-				},
-			},
+			-- basedpyright = {
+			-- 	enable = false,
+			-- 	config = {
+			-- 		analysis = {
+			-- 			typeCheckingMode = "standard",
+			-- 		},
+			-- 	},
+			-- },
 		}
+
+		if use_csharp_ls then
+			servers.csharp_ls = {
+				manual_install = true,
+			}
+		end
 
 		local servers_to_install = vim.tbl_filter(function(key)
 			local t = servers[key]
@@ -183,9 +253,9 @@ return {
 		local ensure_installed = {
 			"stylua",
 			"lua_ls",
-			"omnisharp",
 			"vtsls",
 			"angular-language-server",
+			-- OmniSharp: use `scoop install omnisharp`, not Mason.
 			-- "tailwind-language-server",
 		}
 
@@ -243,16 +313,44 @@ return {
 
 		local _border = "rounded"
 
-		vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
-			border = _border,
-		})
-
-		vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, {
-			border = _border,
-		})
+		-- Nvim 0.12+: vim.lsp.with is deprecated; pass opts to vim.lsp.buf.* and/or set 'winborder'.
+		pcall(vim.api.nvim_set_option_value, "winborder", _border, {})
 
 		vim.diagnostic.config({
 			float = { border = _border },
+		})
+
+		local function lsp_log_path()
+			if vim.lsp.log and vim.lsp.log.get_filename then
+				return vim.lsp.log.get_filename()
+			end
+			---@diagnostic disable-next-line: deprecated
+			return vim.lsp.get_log_path and vim.lsp.get_log_path()
+		end
+
+		vim.api.nvim_create_user_command("LspInfo", "checkhealth vim.lsp", {
+			desc = "Show LSP client/config status (replaces legacy :LspInfo)",
+		})
+
+		vim.api.nvim_create_user_command("LspLog", function()
+			local path = lsp_log_path()
+			if path and path ~= "" then
+				vim.cmd.split(vim.fn.fnameescape(path))
+			else
+				vim.notify("LSP log path not available", vim.log.levels.WARN)
+			end
+		end, { desc = "Open Neovim LSP log (vim.lsp.log)" })
+
+		vim.api.nvim_create_user_command("LspRestart", function(o)
+			local a = vim.trim(o.args or "")
+			if a == "" then
+				vim.cmd("lsp restart")
+			else
+				vim.cmd("lsp restart " .. a)
+			end
+		end, {
+			nargs = "*",
+			desc = "Restart LSP clients on this buffer (:lsp restart …)",
 		})
 
 		vim.api.nvim_create_autocmd("LspAttach", {
@@ -322,7 +420,9 @@ return {
 
 				nmap({
 					"K",
-					command = vim.lsp.buf.hover,
+					command = function()
+						vim.lsp.buf.hover({ border = _border })
+					end,
 					desc = "view definition",
 					opts = opts,
 				})
@@ -357,7 +457,9 @@ return {
 
 				imap({
 					"<C-h>",
-					command = vim.lsp.buf.signature_help,
+					command = function()
+						vim.lsp.buf.signature_help({ border = _border })
+					end,
 					desc = "Go help",
 					opts = opts,
 				})

@@ -1,6 +1,8 @@
 require("lusedou.remap")
 require("lusedou.lazy")
 require("lusedou.set")
+-- @treesitter captures → legacy TS* → :help group-name (vim-deus and similar themes)
+require("lusedou.treesitter_compat")
 
 local augroup = vim.api.nvim_create_augroup
 local autocmd = vim.api.nvim_create_autocmd
