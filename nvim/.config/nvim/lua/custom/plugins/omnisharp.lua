@@ -1,6 +1,6 @@
 return {
   "Hoffs/omnisharp-extended-lsp.nvim",
-  ft = "cs",
+  ft = { "cs", "cshtml", "razor" },
   config = function()
     local nmap = require 'lusedou.keymaps'.nmap
 

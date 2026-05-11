@@ -9,7 +9,8 @@ return {
 		{ "j-hui/fidget.nvim", opts = {} },
 	},
 	config = function()
-		-- require("neodev").setup({})
+		-- Register default `vim.lsp.config` entries from nvim-lspconfig.
+		require("lspconfig")
 
 		local capabilities = nil
 
@@ -120,39 +121,26 @@ return {
 					return ftype
 				end,
 			},
-			-- omnisharp = {
-			-- 	enable = false,
-			-- 	-- sln or csproj
-			-- 	root_dir = lspconfig.util.root_pattern("*.sln", "*.csproj"),
-			-- 	capabilities = capabilities,
-			-- 	cmd = { "dotnet", vim.fn.stdpath("data") .. "/mason/packages/omnisharp/libexec/OmniSharp.dll" },
-			-- 	filetypes = { "cs", "cshtml", "razor" },
-			-- 	settings = {
-			-- 		FormattingOptions = {
-			-- 			-- Enables support for reading code style, naming convention and analyzer
-			-- 			-- settings from .editorconfig.
-			-- 			EnableEditorConfigSupport = true,
-			-- 			-- Specifies whether 'using' directives should be grouped and sorted during
-			-- 			-- document formatting.
-			-- 			OrganizeImports = true,
-			-- 		},
-			-- 		RoslynExtensionsOptions = {
-			-- 			EnableDecompilationSupport = true,
-			-- 			-- Enables support for roslyn analyzers, code fixes and rulesets.
-			-- 			EnableAnalyzersSupport = true,
-			-- 			-- Enables support for showing unimported types and unimported extension
-			-- 			-- methods in completion lists. When committed, the appropriate using
-			-- 			-- directive will be added at the top of the current file. This option can
-			-- 			-- have a negative impact on initial completion responsiveness,
-			-- 			-- particularly for the first few completion sessions after opening a
-			-- 			-- solution.
-			-- 			EnableImportCompletion = true,
-			-- 			-- Only run analyzers against open files when 'enableRoslynAnalyzers' is
-			-- 			-- true
-			-- 			AnalyzeOpenDocumentsOnly = true,
-			-- 		},
-			-- 	},
-			-- },
+			--- OmniSharp Roslyn: Mason package `omnisharp`; cmd/filetypes come from nvim-lspconfig defaults.
+			omnisharp = {
+				filetypes = { "cs", "vb", "cshtml", "razor" },
+				settings = {
+					FormattingOptions = {
+						EnableEditorConfigSupport = true,
+						OrganizeImports = true,
+					},
+					RoslynExtensionsOptions = {
+						EnableDecompilationSupport = true,
+						EnableAnalyzersSupport = true,
+						EnableImportCompletion = true,
+						AnalyzeOpenDocumentsOnly = true,
+					},
+				},
+			},
+			--- TypeScript / JavaScript (Deno projects are skipped by upstream `root_dir` logic).
+			vtsls = {},
+			--- Angular (vscode-ng-language-service); needs `node_modules` with @angular/language-service.
+			angularls = {},
 			-- biome = true,
 			denols = {
 				settings = {
@@ -195,6 +183,9 @@ return {
 		local ensure_installed = {
 			"stylua",
 			"lua_ls",
+			"omnisharp",
+			"vtsls",
+			"angular-language-server",
 			-- "tailwind-language-server",
 		}
 
@@ -219,7 +210,10 @@ return {
 		}
 
 		for server, config in pairs(servers) do
-			if (type(config) == "boolean" and config) or (type(config) == "table" and not config.enable) then
+			local enabled = type(config) == "boolean" and config
+				or (type(config) == "table" and config.enable ~= false)
+
+			if enabled then
 				if config == true then
 					config = {}
 				end
