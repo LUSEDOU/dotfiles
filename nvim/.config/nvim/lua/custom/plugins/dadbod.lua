@@ -10,7 +10,7 @@ return {
     {
       "kristijanhusak/vim-dadbod-completion",
       ft = { 'sql', 'mysql', 'plsql' },
-      lazy = true,
+      -- lazy = true,
     },
   },
   cmd = { 'DBUIToggle', 'DBUI', 'DBUIFindBuffer', 'DBUIRenameBuffer' },

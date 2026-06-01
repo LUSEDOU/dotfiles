@@ -47,7 +47,7 @@ alias tmuxconfig="nvim $TMUXCONFIG"
 # alias ddg="dd pub get $*"
 
 alias t="tree -L 2"
-alias ls="exa -T -L 1 --git --icons"
+alias ls="eza -T -L 1 --git --icons"
 alias lg="lazygit"
 # unalias github
 #

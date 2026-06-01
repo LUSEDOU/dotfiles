@@ -18,6 +18,8 @@ plugins=(
 
 export ZSH_DISABLE_COMPFIX=true
 export DISABLE_MAGIC_FUNCTIONS=true
+export DISABLE_AUTO_UPDATE="true"
+
 
 source $ZSH/oh-my-zsh.sh
 
@@ -26,9 +28,9 @@ setopt interactivecomments # Activate bash style comments
 bindkey -v # Use vim keybindings in zsh
 # bindkey "^F" tmux-sessionizer
 
-# export NVM_DIR="$HOME/.nvm"
-# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-# [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 
 eval "$(starship init zsh)"
@@ -44,8 +46,8 @@ export SDKMAN_DIR="$HOME/.sdkman"
 
 # >>> mamba initialize >>>
 # !! Contents within this block are managed by 'mamba shell init' !!
-# export MAMBA_EXE='/home/lusedou/conda/bin/mamba';
-# export MAMBA_ROOT_PREFIX='/home/lusedou/conda';
+# export MAMBA_EXE='${HOME}/conda/bin/mamba';
+# export MAMBA_ROOT_PREFIX='${HOME}/conda';
 # __mamba_setup="$("$MAMBA_EXE" shell hook --shell zsh --root-prefix "$MAMBA_ROOT_PREFIX" 2> /dev/null)"
 # if [ $? -eq 0 ]; then
 #     eval "$__mamba_setup"
@@ -57,12 +59,17 @@ export SDKMAN_DIR="$HOME/.sdkman"
 
 ## [Completion]
 ## Completion scripts setup. Remove the following line to uninstall
-[[ -f /home/lusedou/.dart-cli-completion/zsh-config.zsh ]] && . /home/lusedou/.dart-cli-completion/zsh-config.zsh || true
+[[ -f ${HOME}/.dart-cli-completion/zsh-config.zsh ]] && . ${HOME}/.dart-cli-completion/zsh-config.zsh || true
 ## [/Completion]
 
 
 # The next line updates PATH for the Google Cloud SDK.
-if [ -f '/home/lusedou/belity/gl/google-cloud-sdk/path.zsh.inc' ]; then . '/home/lusedou/belity/gl/google-cloud-sdk/path.zsh.inc'; fi
+if [ -f '${HOME}/belity/gl/google-cloud-sdk/path.zsh.inc' ]; then . '${HOME}/belity/gl/google-cloud-sdk/path.zsh.inc'; fi
 
 # The next line enables shell command completion for gcloud.
-if [ -f '/home/lusedou/belity/gl/google-cloud-sdk/completion.zsh.inc' ]; then . '/home/lusedou/belity/gl/google-cloud-sdk/completion.zsh.inc'; fi
+if [ -f '${HOME}/belity/gl/google-cloud-sdk/completion.zsh.inc' ]; then . '${HOME}/belity/gl/google-cloud-sdk/completion.zsh.inc'; fi
+
+test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+
+export PATH="/opt/homebrew/opt/php@7.4/bin:$PATH"
+export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH"

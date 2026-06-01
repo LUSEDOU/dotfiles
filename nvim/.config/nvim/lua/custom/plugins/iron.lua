@@ -1,6 +1,7 @@
 return {
 	"hkupty/iron.nvim",
-	filetypes = { "python" },
+	ft = { "python" },
+	lazy = true,
 	keys = {
 		{
 			"<space>rs",
